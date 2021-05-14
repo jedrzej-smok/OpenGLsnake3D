@@ -62,7 +62,7 @@ GLuint readTexture(const char* filename) {
 
 	return tex;
 }
-//mkmklmlkmlmkl
+
 //Odkomentuj, ¿eby rysowaæ kostkê
 //float* vertices = myCubeVertices;
 //float* normals = myCubeNormals;
