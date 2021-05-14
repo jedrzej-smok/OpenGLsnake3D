@@ -60,7 +60,7 @@ GLuint readTexture(const char* filename) {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-	return tex;//ffd
+	return tex;
 }
 //mkmklmlkmlmkl
 //Odkomentuj, ¿eby rysowaæ kostkê
