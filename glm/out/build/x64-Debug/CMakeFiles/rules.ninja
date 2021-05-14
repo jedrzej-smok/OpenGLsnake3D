@@ -29,7 +29,11 @@ rule CUSTOM_COMMAND
 # Rule for re-running cmake.
 
 rule RERUN_CMAKE
+<<<<<<< HEAD
+  command = "C:\Program Files\Amelinda\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" --regenerate-during-build -SC:\Users\Lenovo\Desktop\rebeka\glm -BC:\Users\Lenovo\Desktop\rebeka\glm\out\build\x64-Debug
+=======
   command = D:\mainD\toolsIT\myVSCommnt\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe --regenerate-during-build -SD:\mainD\Desktop\roboczy\glm -BD:\mainD\Desktop\roboczy\glm\out\build\x64-Debug
+>>>>>>> 3f7f73252dec9dc549ffcff32f1765714d80bf09
   description = Re-running CMake...
   generator = 1
 
@@ -38,7 +42,11 @@ rule RERUN_CMAKE
 # Rule for cleaning all built files.
 
 rule CLEAN
+<<<<<<< HEAD
+  command = "C:\Program Files\Amelinda\Common7\IDE\CommonExtensions\Microsoft\CMake\Ninja\ninja.exe" $FILE_ARG -t clean $TARGETS
+=======
   command = D:\MAIND\TOOLSIT\MYVSCOMMNT\COMMON7\IDE\COMMONEXTENSIONS\MICROSOFT\CMAKE\Ninja\ninja.exe $FILE_ARG -t clean $TARGETS
+>>>>>>> 3f7f73252dec9dc549ffcff32f1765714d80bf09
   description = Cleaning all built files...
 
 
@@ -46,6 +54,10 @@ rule CLEAN
 # Rule for printing all primary targets available.
 
 rule HELP
+<<<<<<< HEAD
+  command = "C:\Program Files\Amelinda\Common7\IDE\CommonExtensions\Microsoft\CMake\Ninja\ninja.exe" -t targets
+=======
   command = D:\MAIND\TOOLSIT\MYVSCOMMNT\COMMON7\IDE\COMMONEXTENSIONS\MICROSOFT\CMAKE\Ninja\ninja.exe -t targets
+>>>>>>> 3f7f73252dec9dc549ffcff32f1765714d80bf09
   description = All primary targets available:
 

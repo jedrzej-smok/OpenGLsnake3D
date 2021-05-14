@@ -1,2 +1,7 @@
+<<<<<<< HEAD
+C:/Users/Lenovo/Desktop/rebeka/glm/out/build/x64-Debug/CMakeFiles/edit_cache.dir
+C:/Users/Lenovo/Desktop/rebeka/glm/out/build/x64-Debug/CMakeFiles/rebuild_cache.dir
+=======
 D:/mainD/Desktop/roboczy/glm/out/build/x64-Debug/CMakeFiles/edit_cache.dir
 D:/mainD/Desktop/roboczy/glm/out/build/x64-Debug/CMakeFiles/rebuild_cache.dir
+>>>>>>> 3f7f73252dec9dc549ffcff32f1765714d80bf09
