@@ -160,7 +160,7 @@ void initOpenGLProgram(GLFWwindow* window) {
 	glfwSetWindowSizeCallback(window,windowResizeCallback);
 	glfwSetKeyCallback(window,keyCallback);
 	//Wczytanie i import obrazka – w initOpenGLProgram
-	tex0 = readTexture("handgun_fire.png");
+	tex0 = readTexture("metal.png");
 	tex1 = readTexture("sky.png");//druga tekstura
 
 	sp=new ShaderProgram("v_simplest.glsl",NULL,"f_simplest.glsl");
