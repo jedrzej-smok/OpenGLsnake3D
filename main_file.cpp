@@ -110,18 +110,18 @@ GLuint readTexture(const char* filename) {
 
 
 //Odkomentuj, ¿eby rysowaæ czajnik
-/*float* vertices = myTeapotVertices;
+float* vertices = myTeapotVertices;
 float* normals = myTeapotVertexNormals;
 float* texCoords = myTeapotTexCoords;
 float* colors = myTeapotColors;
-int vertexCount = myTeapotVertexCount;*/
+int vertexCount = myTeapotVertexCount;
 
 //ASSIMP
-auto vertices = verts.data();
+/*auto vertices = verts.data();
 auto normals = norms.data();
 auto texCoords = texs.data();
 float* colors = myTeapotColors;
-int vertexCount = myTeapotVertexCount;
+int vertexCount = myTeapotVertexCount;*/
 
 
 
@@ -166,7 +166,7 @@ void initOpenGLProgram(GLFWwindow* window) {
 	sp=new ShaderProgram("v_simplest.glsl",NULL,"f_simplest.glsl");
 	
 	//assimp
-	loadModel(std::string("Handgun_obj.obj"));
+	//loadModel(std::string("Handgun_obj.obj"));
 }
 
 
