@@ -228,8 +228,8 @@ void drawScene(GLFWwindow* window,float angle_x,float angle_y) {
 	glBindTexture(GL_TEXTURE_2D, tex1);//przypiasanie tekstury do jednostki
 
 
-    //glDrawArrays(GL_TRIANGLES,0,vertexCount); //Narysuj obiekt
-	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, indices.data());
+    glDrawArrays(GL_TRIANGLES,0,vertexCount); //Narysuj obiekt
+	//glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, indices.data());
 
     glDisableVertexAttribArray(sp->a("vertex"));  //Wy³¹cz przesy³anie danych do atrybutu vertex
 	glDisableVertexAttribArray(sp->a("color"));  //Wy³¹cz przesy³anie danych do atrybutu color
