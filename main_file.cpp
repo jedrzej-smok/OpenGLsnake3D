@@ -1,4 +1,4 @@
-/**dsdsdsdsdsdsdsd
+/*
 Niniejszy program jest wolnym oprogramowaniem; mo¿esz go
 rozprowadzaæ dalej i / lub modyfikowaæ na warunkach Powszechnej
 Licencji Publicznej GNU, wydanej przez Fundacjê Wolnego
