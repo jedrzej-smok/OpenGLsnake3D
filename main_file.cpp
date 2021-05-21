@@ -33,9 +33,9 @@ Place, Fifth Floor, Boston, MA  02110 - 1301  USA
 #include "shaderprogram.h"
 #include "myCube.h"
 #include "myTeapot.h"
-#include <assimp/Importer.hpp>
-#include <assimp/scene.h>
-#include <assimp/postprocess.h>
+#include <assimp/Importer.hpp> //wczytuje plik
+#include <assimp/scene.h> //scene to reprezentacja calego pliku
+#include <assimp/postprocess.h> //to co mozna zrobic z plikiem
 
 float speed_x=0;
 float speed_y=0;
@@ -47,12 +47,32 @@ std::vector<glm::vec4> verts;
 std::vector<glm::vec4> norms;
 std::vector<glm::vec2> texs;
 std::vector<unsigned int> indices;
-void loadModel(std::string path)
+
+void loadModelAssimp(std::string path)
 {
 	Assimp::Importer import;
 	const aiScene* scene = import.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenSmoothNormals);
+	std::cout << import.GetErrorString() << std::endl;
+	if (scene->HasMeshes()) {
+		std::cout << "scena ma meshes\n";
+		std::cout << "scena ma textury:" << scene->mNumTextures << std::endl;
+		for (int m = 0; m < scene->mNumMeshes; m++) {
+			std::cout << "Mesh nr:" << m << ", ";
+		}
+	}
+	else { std::cout << "scena nie ma meshy"; }
+	
 
 	aiMesh* mesh = scene->mMeshes[0];//mamy jeden model
+	if(mesh->HasTextureCoords(0))
+	{
+		std::cout << "hasTexturecoords(0)";
+	}
+	unsigned int liczba_zest = mesh->GetNumUVChannels();
+	unsigned int wymiar_wsp_tex = mesh->mNumUVComponents[0];
+	std::cout << "liczba zestawow tekstur dla mesha:" << liczba_zest << std::endl;
+	std::cout << "wymiar dla zestawu 0:" << wymiar_wsp_tex << std::endl;
+
 	for (int i = 0; i < mesh->mNumVertices; i++) {
 		aiVector3D vertex = mesh->mVertices[i];
 		verts.push_back(glm::vec4(vertex.x, vertex.y, vertex.z, 1));//bo wierzchoelk
@@ -61,20 +81,23 @@ void loadModel(std::string path)
 		norms.push_back(glm::vec4(normal.x, normal.y, normal.z, 0));//bo wektor
 
 
-		//unsigned int liczba_zest = mesh->GetNumUVChannels();
-		//unsigned int wymiar_wsp_tex = mesh->mNumUVComponents[0];
+		
 		
 		aiVector3D texCoord = mesh->mTextureCoords[0][i];
 		texs.push_back(glm::vec2(texCoord.x, texCoord.y));
 	}
-
+	//mesh skalada sie z wielokatow, face to ten wielokat
 	for (int i = 0; i < mesh->mNumFaces; i++) {
 		aiFace face = mesh->mFaces[i];
-		for (int j = 0; j < face.mNumIndices; j++) {
+		for (int j = 0; j < face.mNumIndices; j++) {//numIndicies to liczba wierzchokow tworzacych jeden wielokat
 			indices.push_back(face.mIndices[j]);
 		}
 	}
-
+	std::cout << "mesha ma faces:" << mesh->mNumFaces << std:: endl;
+	std::cout << "size verts:" << verts.size() << std:: endl;
+	std::cout << "size norms:" << norms.size() << std:: endl;
+	std::cout << "size texs:" << texs.size() << std:: endl;
+	std::cout << "size indicies:" << indices.size() << std:: endl;
 }
 
 
@@ -107,21 +130,6 @@ GLuint readTexture(const char* filename) {
 //float* texCoords = myCubeTexCoords;
 //float* colors = myCubeColors;
 //int vertexCount = myCubeVertexCount;
-
-
-//Odkomentuj, ¿eby rysowaæ czajnik
-float* vertices = myTeapotVertices;
-float* normals = myTeapotVertexNormals;
-float* texCoords = myTeapotTexCoords;
-float* colors = myTeapotColors;
-int vertexCount = myTeapotVertexCount;
-
-//ASSIMP
-/*auto vertices = verts.data();
-auto normals = norms.data();
-auto texCoords = texs.data();
-float* colors = myTeapotColors;
-int vertexCount = myTeapotVertexCount;*/
 
 
 
@@ -166,7 +174,7 @@ void initOpenGLProgram(GLFWwindow* window) {
 	sp=new ShaderProgram("v_simplest.glsl",NULL,"f_simplest.glsl");
 	
 	//assimp
-	//loadModel(std::string("Handgun_obj.obj"));
+	loadModelAssimp(std::string("anvil.obj"));
 }
 
 
@@ -188,7 +196,7 @@ void drawScene(GLFWwindow* window,float angle_x,float angle_y) {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glm::mat4 V=glm::lookAt(
-         glm::vec3(0, 0, -2.5),
+         glm::vec3(0, 0, -12.5),
          glm::vec3(0,0,0),
          glm::vec3(0.0f,1.0f,0.0f)); //Wylicz macierz widoku
 
@@ -205,16 +213,16 @@ void drawScene(GLFWwindow* window,float angle_x,float angle_y) {
     glUniformMatrix4fv(sp->u("M"),1,false,glm::value_ptr(M));
 
     glEnableVertexAttribArray(sp->a("vertex"));  //W³¹cz przesy³anie danych do atrybutu vertex
-    glVertexAttribPointer(sp->a("vertex"),4,GL_FLOAT,false,0,vertices); //Wska¿ tablicê z danymi dla atrybutu vertex
+    glVertexAttribPointer(sp->a("vertex"),4,GL_FLOAT,false,0,verts.data()); //Wska¿ tablicê z danymi dla atrybutu vertex
 
-	glEnableVertexAttribArray(sp->a("color"));  //W³¹cz przesy³anie danych do atrybutu color
-	glVertexAttribPointer(sp->a("color"), 4, GL_FLOAT, false, 0, colors); //Wska¿ tablicê z danymi dla atrybutu color
+	//glEnableVertexAttribArray(sp->a("color"));  //W³¹cz przesy³anie danych do atrybutu color
+	//glVertexAttribPointer(sp->a("color"), 4, GL_FLOAT, false, 0, colors); //Wska¿ tablicê z danymi dla atrybutu color
 
 	glEnableVertexAttribArray(sp->a("normal"));  //W³¹cz przesy³anie danych do atrybutu normal
-	glVertexAttribPointer(sp->a("normal"), 4, GL_FLOAT, false, 0, normals); //Wska¿ tablicê z danymi dla atrybutu normal
+	glVertexAttribPointer(sp->a("normal"), 4, GL_FLOAT, false, 0, norms.data()); //Wska¿ tablicê z danymi dla atrybutu normal
 
 	glEnableVertexAttribArray(sp->a("texCoord0"));
-	glVertexAttribPointer(sp->a("texCoord0"), 2, GL_FLOAT, false, 0, texCoords);//odpowiednia tablica
+	glVertexAttribPointer(sp->a("texCoord0"), 2, GL_FLOAT, false, 0, texs.data());//odpowiednia tablica
 
 	//Powi¹zanie zmiennej typu sampler2D z jednostk¹ teksturuj¹ca, tu zerowa jednostka teksturujaca z fs
 	glUniform1i(sp->u("textureMap0"), 0); //drawScene
@@ -227,12 +235,15 @@ void drawScene(GLFWwindow* window,float angle_x,float angle_y) {
 	glActiveTexture(GL_TEXTURE1);//aktywacja jeddnostki teksturujacej
 	glBindTexture(GL_TEXTURE_2D, tex1);//przypiasanie tekstury do jednostki
 
+	//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    //glDrawArrays(GL_TRIANGLES,0,vertexCount); //Narysuj obiekt
+	//do Assimp
+	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, indices.data());
 
-    glDrawArrays(GL_TRIANGLES,0,vertexCount); //Narysuj obiekt
-	//glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, indices.data());
+
 
     glDisableVertexAttribArray(sp->a("vertex"));  //Wy³¹cz przesy³anie danych do atrybutu vertex
-	glDisableVertexAttribArray(sp->a("color"));  //Wy³¹cz przesy³anie danych do atrybutu color
+	//glDisableVertexAttribArray(sp->a("color"));  //Wy³¹cz przesy³anie danych do atrybutu color
 	glDisableVertexAttribArray(sp->a("normal"));  //Wy³¹cz przesy³anie danych do atrybutu normal
 	glDisableVertexAttribArray(sp->a("texCoord0"));
 

@@ -7,14 +7,14 @@ uniform mat4 M;
 
 //Atrybuty
 in vec4 vertex; //wspolrzedne wierzcholka w przestrzeni modelu
-in vec4 color; //kolor związany z wierzchołkiem
+
 in vec4 normal; //wektor normalny w przestrzeni modelu
 
 in vec2 texCoord0;
 
 
 //Zmienne interpolowane
-out vec4 ic;
+
 out vec4 l;
 out vec4 n;
 out vec4 v;
@@ -30,7 +30,8 @@ void main(void) {
     iTexCoord0 = texCoord0;
     iTexCoord1 = (n.xy+1)/2;//cw10
 
-    ic = color;
+   
     
     gl_Position=P*V*M*vertex;
+    
 }
