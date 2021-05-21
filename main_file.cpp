@@ -42,6 +42,11 @@ float speed_y=0;
 float aspectRatio=1;
 GLuint tex0; //Uchwyt – deklaracja globalna
 GLuint tex1; //Uchwyt – deklaracja globalna, na druga teksture
+GLuint bufVertex;//identyfiakator bufora z wierzcholkami
+GLuint bufNormal;//identyfiakator bufora z normalnymi
+GLuint bufTexCoord;//identyfiakator bufora z wspTeksturowania
+int numberOfVerts;
+
 ShaderProgram *sp;
 std::vector<glm::vec4> verts;
 std::vector<glm::vec4> norms;
@@ -81,8 +86,6 @@ void loadModelAssimp(std::string path)
 		norms.push_back(glm::vec4(normal.x, normal.y, normal.z, 0));//bo wektor
 
 
-		
-		
 		aiVector3D texCoord = mesh->mTextureCoords[0][i];
 		texs.push_back(glm::vec2(texCoord.x, texCoord.y));
 	}
@@ -173,8 +176,27 @@ void initOpenGLProgram(GLFWwindow* window) {
 
 	sp=new ShaderProgram("v_simplest.glsl",NULL,"f_simplest.glsl");
 	
+	//NAJPIERW CZYTAJ OBIEKT XDDDDDDDDDDD
 	//assimp
 	loadModelAssimp(std::string("anvil.obj"));
+
+	//VBO
+	numberOfVerts = verts.size();
+	glGenBuffers(1, &bufVertex);//liczba uchwytow do wygenerowania,wskaznik na dokad te uchwyty maja byc wygenerowane
+	glBindBuffer(GL_ARRAY_BUFFER, bufVertex);//jakis typ, uchwyt ktory uaktywaniamy
+	glBufferData(GL_ARRAY_BUFFER, numberOfVerts*sizeof(float) * 4, verts.data(), GL_STATIC_DRAW);//liczba bajtow,tablica z danymi, spsoob dostepu danyych
+
+	glGenBuffers(1, &bufNormal);//liczba uchwytow do wygenerowania,wskaznik na dokad te uchwyty maja byc wygenerowane
+	glBindBuffer(GL_ARRAY_BUFFER, bufNormal);//jakis typ, uchwyt ktory uaktywaniamy
+	glBufferData(GL_ARRAY_BUFFER, numberOfVerts * sizeof(float) * 4, norms.data(), GL_STATIC_DRAW);//liczba bajtow,tablica z danymi, spsoob dostepu danyych
+
+	glGenBuffers(1, &bufTexCoord);//liczba uchwytow do wygenerowania,wskaznik na dokad te uchwyty maja byc wygenerowane
+	glBindBuffer(GL_ARRAY_BUFFER, bufTexCoord);//jakis typ, uchwyt ktory uaktywaniamy
+	glBufferData(GL_ARRAY_BUFFER, numberOfVerts * sizeof(float) * 2, texs.data(), GL_STATIC_DRAW);//liczba bajtow,tablica z danymi, spsoob dostepu danyych
+	
+	glBindBuffer(GL_ARRAY_BUFFER, 0);//sprzatanie
+	
+	
 }
 
 
@@ -213,17 +235,20 @@ void drawScene(GLFWwindow* window,float angle_x,float angle_y) {
     glUniformMatrix4fv(sp->u("M"),1,false,glm::value_ptr(M));
 
     glEnableVertexAttribArray(sp->a("vertex"));  //W³¹cz przesy³anie danych do atrybutu vertex
-    glVertexAttribPointer(sp->a("vertex"),4,GL_FLOAT,false,0,verts.data()); //Wska¿ tablicê z danymi dla atrybutu vertex
-
-	//glEnableVertexAttribArray(sp->a("color"));  //W³¹cz przesy³anie danych do atrybutu color
-	//glVertexAttribPointer(sp->a("color"), 4, GL_FLOAT, false, 0, colors); //Wska¿ tablicê z danymi dla atrybutu color
+	glBindBuffer(GL_ARRAY_BUFFER, bufVertex);//chyba ten bufor aktywny
+	glVertexAttribPointer(sp->a("vertex"),4,GL_FLOAT,false,0,NULL); //Wska¿ tablicê z danymi dla atrybutu vertex; zmiana na VBO
 
 	glEnableVertexAttribArray(sp->a("normal"));  //W³¹cz przesy³anie danych do atrybutu normal
-	glVertexAttribPointer(sp->a("normal"), 4, GL_FLOAT, false, 0, norms.data()); //Wska¿ tablicê z danymi dla atrybutu normal
+	glBindBuffer(GL_ARRAY_BUFFER, bufNormal);//chyba ten bufor aktywny
+	glVertexAttribPointer(sp->a("normal"), 4, GL_FLOAT, false, 0, NULL); //Wska¿ tablicê z danymi dla atrybutu normal
 
 	glEnableVertexAttribArray(sp->a("texCoord0"));
-	glVertexAttribPointer(sp->a("texCoord0"), 2, GL_FLOAT, false, 0, texs.data());//odpowiednia tablica
+	glBindBuffer(GL_ARRAY_BUFFER, bufTexCoord);//chyba ten bufor aktywny
+	glVertexAttribPointer(sp->a("texCoord0"), 2, GL_FLOAT, false, 0, NULL);//odpowiednia tablica
 
+	glBindBuffer(GL_ARRAY_BUFFER, 0);//sprzatanie
+
+	//CIENIOWANIE
 	//Powi¹zanie zmiennej typu sampler2D z jednostk¹ teksturuj¹ca, tu zerowa jednostka teksturujaca z fs
 	glUniform1i(sp->u("textureMap0"), 0); //drawScene
 	
@@ -236,14 +261,13 @@ void drawScene(GLFWwindow* window,float angle_x,float angle_y) {
 	glBindTexture(GL_TEXTURE_2D, tex1);//przypiasanie tekstury do jednostki
 
 	//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    //glDrawArrays(GL_TRIANGLES,0,vertexCount); //Narysuj obiekt
+    //glDrawArrays(GL_TRIANGLES,0,numberOfVerts ); //Narysuj obiekt/
 	//do Assimp
-	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, indices.data());
+	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, indices.data()); //PO ZMIANIA na VBO
 
 
 
     glDisableVertexAttribArray(sp->a("vertex"));  //Wy³¹cz przesy³anie danych do atrybutu vertex
-	//glDisableVertexAttribArray(sp->a("color"));  //Wy³¹cz przesy³anie danych do atrybutu color
 	glDisableVertexAttribArray(sp->a("normal"));  //Wy³¹cz przesy³anie danych do atrybutu normal
 	glDisableVertexAttribArray(sp->a("texCoord0"));
 
