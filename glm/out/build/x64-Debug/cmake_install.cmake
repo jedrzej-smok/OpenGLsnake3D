@@ -1,16 +1,8 @@
-<<<<<<< HEAD
-# Install script for directory: C:/Users/Lenovo/Desktop/rebeka/glm
+# Install script for directory: C:/Users/DELL/Desktop/GKiW_ALL/z1/glm
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "C:/Users/Lenovo/Desktop/rebeka/glm/out/install/x64-Debug")
-=======
-# Install script for directory: D:/mainD/Desktop/roboczy/glm
-
-# Set the install prefix
-if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "D:/mainD/Desktop/roboczy/glm/out/install/x64-Debug")
->>>>>>> 3f7f73252dec9dc549ffcff32f1765714d80bf09
+  set(CMAKE_INSTALL_PREFIX "C:/Users/DELL/Desktop/GKiW_ALL/z1/glm/out/install/x64-Debug")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -48,9 +40,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-<<<<<<< HEAD
-file(WRITE "C:/Users/Lenovo/Desktop/rebeka/glm/out/build/x64-Debug/${CMAKE_INSTALL_MANIFEST}"
-=======
-file(WRITE "D:/mainD/Desktop/roboczy/glm/out/build/x64-Debug/${CMAKE_INSTALL_MANIFEST}"
->>>>>>> 3f7f73252dec9dc549ffcff32f1765714d80bf09
+file(WRITE "C:/Users/DELL/Desktop/GKiW_ALL/z1/glm/out/build/x64-Debug/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
