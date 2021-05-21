@@ -45,8 +45,9 @@ GLuint tex1; //Uchwyt – deklaracja globalna, na druga teksture
 GLuint bufVertex;//identyfiakator bufora z wierzcholkami
 GLuint bufNormal;//identyfiakator bufora z normalnymi
 GLuint bufTexCoord;//identyfiakator bufora z wspTeksturowania
+GLuint bufIndex;//identyfiakator bufora z indeksami
 int numberOfVerts;
-
+int numberOfIndex;
 ShaderProgram *sp;
 std::vector<glm::vec4> verts;
 std::vector<glm::vec4> norms;
@@ -182,6 +183,7 @@ void initOpenGLProgram(GLFWwindow* window) {
 
 	//VBO
 	numberOfVerts = verts.size();
+	numberOfIndex = indices.size();
 	glGenBuffers(1, &bufVertex);//liczba uchwytow do wygenerowania,wskaznik na dokad te uchwyty maja byc wygenerowane
 	glBindBuffer(GL_ARRAY_BUFFER, bufVertex);//jakis typ, uchwyt ktory uaktywaniamy
 	glBufferData(GL_ARRAY_BUFFER, numberOfVerts*sizeof(float) * 4, verts.data(), GL_STATIC_DRAW);//liczba bajtow,tablica z danymi, spsoob dostepu danyych
@@ -193,8 +195,13 @@ void initOpenGLProgram(GLFWwindow* window) {
 	glGenBuffers(1, &bufTexCoord);//liczba uchwytow do wygenerowania,wskaznik na dokad te uchwyty maja byc wygenerowane
 	glBindBuffer(GL_ARRAY_BUFFER, bufTexCoord);//jakis typ, uchwyt ktory uaktywaniamy
 	glBufferData(GL_ARRAY_BUFFER, numberOfVerts * sizeof(float) * 2, texs.data(), GL_STATIC_DRAW);//liczba bajtow,tablica z danymi, spsoob dostepu danyych
-	
 	glBindBuffer(GL_ARRAY_BUFFER, 0);//sprzatanie
+
+	glGenBuffers(1, &bufIndex);//liczba uchwytow do wygenerowania,wskaznik na dokad te uchwyty maja byc wygenerowane
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bufIndex);//jakis typ, uchwyt ktory uaktywaniamy
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, numberOfIndex * sizeof(int), indices.data(), GL_STATIC_DRAW);//liczba bajtow,tablica z danymi, spsoob dostepu danyych
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);//sprzatanie
+	
 	
 	
 }
@@ -206,6 +213,9 @@ void freeOpenGLProgram(GLFWwindow* window) {
 	//Usuniêcie tekstury z pamiêci karty graficznej – w freeOpenGLProgram
 	glDeleteTextures(1, &tex0);
 	glDeleteTextures(1, &tex1);
+	glDeleteBuffers(1, &bufVertex);//usuniecie VBO z GPU
+	glDeleteBuffers(1, &bufNormal);
+	glDeleteBuffers(1, &bufTexCoord);
     delete sp;
 }
 
@@ -245,8 +255,8 @@ void drawScene(GLFWwindow* window,float angle_x,float angle_y) {
 	glEnableVertexAttribArray(sp->a("texCoord0"));
 	glBindBuffer(GL_ARRAY_BUFFER, bufTexCoord);//chyba ten bufor aktywny
 	glVertexAttribPointer(sp->a("texCoord0"), 2, GL_FLOAT, false, 0, NULL);//odpowiednia tablica
-
 	glBindBuffer(GL_ARRAY_BUFFER, 0);//sprzatanie
+	
 
 	//CIENIOWANIE
 	//Powi¹zanie zmiennej typu sampler2D z jednostk¹ teksturuj¹ca, tu zerowa jednostka teksturujaca z fs
@@ -263,8 +273,10 @@ void drawScene(GLFWwindow* window,float angle_x,float angle_y) {
 	//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     //glDrawArrays(GL_TRIANGLES,0,numberOfVerts ); //Narysuj obiekt/
 	//do Assimp
-	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, indices.data()); //PO ZMIANIA na VBO
 
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bufIndex);//chyba ten bufor aktywny
+	glDrawElements(GL_TRIANGLES, numberOfIndex, GL_UNSIGNED_INT,NULL); //PO ZMIANIA na VBO
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);//sprzatanie
 
 
     glDisableVertexAttribArray(sp->a("vertex"));  //Wy³¹cz przesy³anie danych do atrybutu vertex
