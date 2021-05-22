@@ -202,7 +202,7 @@ void initOpenGLProgram(GLFWwindow* window) {
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, numberOfIndex * sizeof(int), indices.data(), GL_STATIC_DRAW);//liczba bajtow,tablica z danymi, spsoob dostepu danyych
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);//sprzatanie
 	
-	
+	//koniec VBO
 	
 }
 
@@ -216,6 +216,7 @@ void freeOpenGLProgram(GLFWwindow* window) {
 	glDeleteBuffers(1, &bufVertex);//usuniecie VBO z GPU
 	glDeleteBuffers(1, &bufNormal);
 	glDeleteBuffers(1, &bufTexCoord);
+	glDeleteBuffers(1, &bufIndex);
     delete sp;
 }
 
