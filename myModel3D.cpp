@@ -29,25 +29,33 @@ void myModel3D::loadModelAssimp(std::string path)
 	const aiScene* scene = import.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenSmoothNormals);
 	std::cout << import.GetErrorString() << std::endl;
 	if (scene->HasMeshes()) {
-		std::cout << "scena ma meshes\n";
-		std::cout << "scena ma textury:" << scene->mNumTextures << std::endl;
-		for (int m = 0; m < scene->mNumMeshes; m++) {
-			std::cout << "Mesh nr:" << m << ", ";
-		}
+		std::cout << "scena ma jakies meshe, cos wczytane\n";
+		numberOfMeshs = scene->mNumMeshes;
+		std::cout << "scena ma ile meshy:" << numberOfMeshs << std::endl;
+		std::cout << "scena ma ile wbudowanych textur:" << scene->mNumTextures << std::endl;
+		std::cout << "scena ma ile zrodel swiatla:"  << scene->mNumLights << std::endl;
+		std::cout << "scena ma ile materialow:"  << scene->mNumMaterials << std::endl;
 	}
-	else { std::cout << "scena nie ma meshy"; }
-
+	else { std::cout << "scena nie ma meshy, niepoprawne wczytanie modelu.\n"; }
+	
 
 	aiMesh* mesh = scene->mMeshes[0];//mamy jeden model
-	if (mesh->HasTextureCoords(0))
-	{
-		std::cout << "hasTexturecoords(0)";
-	}
-	unsigned int liczba_zest = mesh->GetNumUVChannels();
-	unsigned int wymiar_wsp_tex = mesh->mNumUVComponents[0];
-	std::cout << "liczba zestawow tekstur dla mesha:" << liczba_zest << std::endl;
-	std::cout << "wymiar dla zestawu 0:" << wymiar_wsp_tex << std::endl;
+	for (int m = 0; m < scene->mNumMeshes; m++) {
+		mesh = scene->mMeshes[m];
+		std::cout << "Mesh nr:" << m << "\n";
+		unsigned int liczba_zest = mesh->GetNumUVChannels();
+		std::cout << "liczba zestawow tekstur dla mesha:" << liczba_zest << std::endl;
+		for (int t = 0; t < 8; t++) {
+			if (mesh->HasTextureCoords(t))
+			{
+				std::cout << "mesha ma zestaw teksturowania nr:"<<t<<", ten zestaw ma wymiarow:"<< mesh->mNumUVComponents[t]<<"\n";
+			}
+		}
 
+	}
+	
+	
+	 
 	for (int i = 0; i < mesh->mNumVertices; i++) {
 		aiVector3D vertex = mesh->mVertices[i];
 		verts.push_back(glm::vec4(vertex.x, vertex.y, vertex.z, 1));//bo wierzchoelk
