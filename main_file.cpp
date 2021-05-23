@@ -79,7 +79,7 @@ void initOpenGLProgram(GLFWwindow* window) {
 	glfwSetWindowSizeCallback(window,windowResizeCallback);
 	glfwSetKeyCallback(window,keyCallback);
 
-	firstModel.initModel();
+	firstModel.initModel("anvil.obj", "metal.png","sky.png");
 
 }
 

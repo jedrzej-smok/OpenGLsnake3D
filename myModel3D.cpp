@@ -73,16 +73,16 @@ void myModel3D::loadModelAssimp(std::string path)
 	std::cout << "size indicies:" << indices.size() << std::endl;
 }
 
-void myModel3D::initModel() {
+void myModel3D::initModel(const char* pathObj, const char* pathTex0, const char* pathTex1) {
 
 	//NAJPIERW CZYTAJ OBIEKT XDDDDDDDDDDD
 	//assimp
-	loadModelAssimp(std::string("anvil.obj"));
+	loadModelAssimp(std::string(pathObj));
 
 	//tekstury
 	//Wczytanie i import obrazka – z initOpenGLProgram
-	tex0 = readTexture("metal.png");
-	tex1 = readTexture("sky.png");//druga tekstura
+	tex0 = readTexture(pathTex0);
+	tex1 = readTexture(pathTex1);//druga tekstura
 	//program cieniujacy
 	sp = new ShaderProgram("v_simplest.glsl", NULL, "f_simplest.glsl");
 	//VBO

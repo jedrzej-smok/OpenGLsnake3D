@@ -41,7 +41,7 @@ class myModel3D
 		GLuint bufTexCoord;//identyfiakator bufora z wspTeksturowania
 		GLuint bufIndex;//identyfiakator bufora z indeksami
 		ShaderProgram* sp;
-		void initModel();
+		void initModel(const char* pathObj, const char* pathTex0, const char* pathTex1);
 		void freeModel();
 
 		//funckje rysujace
