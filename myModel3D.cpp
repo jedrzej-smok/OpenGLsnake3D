@@ -119,9 +119,21 @@ void myModel3D::freeModel() {
 	glDeleteBuffers(1, &bufIndex);
 	delete sp;
 }
-void myModel3D::drawModel(float rotationX, float rotationY) {
+void myModel3D:: drawModel(float moveX, float moveY, float moveZ,
+	float rotationX, float rotationY, float rotationZ,
+	float rescaleX, float rescaleY, float rescaleZ){
+
+	coord_x += moveX;//przesuñ model
+	coord_y += moveY;
+	coord_z += moveZ;
+
 	angle_x += rotationX;//przekrec model
 	angle_y += rotationY;
+	angle_z += rotationZ;
+
+	scale_x *= rescaleX;
+	scale_y *= rescaleY;
+	scale_z *= rescaleZ;
 
 	M = glm::mat4(1.0f);
 	M = glm::rotate(M, angle_y, glm::vec3(1.0f, 0.0f, 0.0f)); //Wylicz macierz modelu

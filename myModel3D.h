@@ -52,9 +52,22 @@ class myModel3D
 		glm::mat4 M = glm::mat4(1.0f);
 	
 		//zmienne od animacji
+		float coord_x = 0;
+		float coord_y = 0;
+		float coord_z = 0;
+
 		float angle_x=0;
 		float angle_y=0;
+		float angle_z=0;
 
-		void drawModel(float rotationX, float rotationY);
+		float scale_x = 1.0f;
+		float scale_y = 1.0f;
+		float scale_z = 1.0f;
+
+
+
+		void drawModel( float moveX=0.f, float moveY = 0.f, float moveZ = 0.f,
+			float rotationX=0.f, float rotationY=0.f, float rotationZ = 0.f,
+			float rescaleX=1.0f, float rescaleY = 1.0f, float rescaleZ = 1.0f );
 };
 

@@ -98,7 +98,7 @@ void drawScene(GLFWwindow* window) {
 	//************Tutaj umieszczaj kod rysuj¹cy obraz******************
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 //wlasciwa czesc ============================================================
-	firstModel.drawModel(speed_x*frameTime, speed_y*frameTime);
+	firstModel.drawModel(0,0,0,speed_x*frameTime, speed_y*frameTime,0,1,1,1);
 
 
 //reszta=====================================================================
