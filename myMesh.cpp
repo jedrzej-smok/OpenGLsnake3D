@@ -1,6 +1,6 @@
-#include "myModel3D.h"
+#include "myMesh.h"
 
-GLuint myModel3D::readTexture(const char* filename) {
+GLuint myMesh::readTexture(const char* filename) {
 	GLuint tex;
 	glActiveTexture(GL_TEXTURE0);
 
@@ -23,70 +23,11 @@ GLuint myModel3D::readTexture(const char* filename) {
 	return tex;
 }
 
-void myModel3D::loadModelAssimp(std::string path)
-{
-	Assimp::Importer import;
-	const aiScene* scene = import.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenSmoothNormals);
-	std::cout << import.GetErrorString() << std::endl;
-	if (scene->HasMeshes()) {
-		std::cout << "scena ma jakies meshe, cos wczytane\n";
-		numberOfMeshs = scene->mNumMeshes;
-		std::cout << "scena ma ile meshy:" << numberOfMeshs << std::endl;
-		std::cout << "scena ma ile wbudowanych textur:" << scene->mNumTextures << std::endl;
-		std::cout << "scena ma ile zrodel swiatla:"  << scene->mNumLights << std::endl;
-		std::cout << "scena ma ile materialow:"  << scene->mNumMaterials << std::endl;
-	}
-	else { std::cout << "scena nie ma meshy, niepoprawne wczytanie modelu.\n"; }
+
+
+void myMesh::setupMesh( const char* pathTex0, const char* pathTex1) {
+
 	
-
-	aiMesh* mesh = scene->mMeshes[0];//mamy jeden model
-	for (int m = 0; m < scene->mNumMeshes; m++) {
-		mesh = scene->mMeshes[m];
-		std::cout << "Mesh nr:" << m << "\n";
-		unsigned int liczba_zest = mesh->GetNumUVChannels();
-		std::cout << "liczba zestawow tekstur dla mesha:" << liczba_zest << std::endl;
-		for (int t = 0; t < 8; t++) {
-			if (mesh->HasTextureCoords(t))
-			{
-				std::cout << "mesha ma zestaw teksturowania nr:"<<t<<", ten zestaw ma wymiarow:"<< mesh->mNumUVComponents[t]<<"\n";
-			}
-		}
-
-	}
-	
-	
-	 
-	for (int i = 0; i < mesh->mNumVertices; i++) {
-		aiVector3D vertex = mesh->mVertices[i];
-		verts.push_back(glm::vec4(vertex.x, vertex.y, vertex.z, 1));//bo wierzchoelk
-
-		aiVector3D normal = mesh->mNormals[i];
-		norms.push_back(glm::vec4(normal.x, normal.y, normal.z, 0));//bo wektor
-
-
-		aiVector3D texCoord = mesh->mTextureCoords[0][i];
-		texs.push_back(glm::vec2(texCoord.x, texCoord.y));
-	}
-	//mesh skalada sie z wielokatow, face to ten wielokat
-	for (int i = 0; i < mesh->mNumFaces; i++) {
-		aiFace face = mesh->mFaces[i];
-		for (int j = 0; j < face.mNumIndices; j++) {//numIndicies to liczba wierzchokow tworzacych jeden wielokat
-			indices.push_back(face.mIndices[j]);
-		}
-	}
-	std::cout << "mesha ma faces:" << mesh->mNumFaces << std::endl;
-	std::cout << "size verts:" << verts.size() << std::endl;
-	std::cout << "size norms:" << norms.size() << std::endl;
-	std::cout << "size texs:" << texs.size() << std::endl;
-	std::cout << "size indicies:" << indices.size() << std::endl;
-}
-
-void myModel3D::initModel(const char* pathObj, const char* pathTex0, const char* pathTex1) {
-
-	//NAJPIERW CZYTAJ OBIEKT XDDDDDDDDDDD
-	//assimp
-	loadModelAssimp(std::string(pathObj));
-
 	//tekstury
 	//Wczytanie i import obrazka – z initOpenGLProgram
 	tex0 = readTexture(pathTex0);
@@ -115,7 +56,7 @@ void myModel3D::initModel(const char* pathObj, const char* pathTex0, const char*
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);//sprzatanie
 	//koniec VBO
 }
-void myModel3D::freeModel() {
+void myMesh::freeMesh() {
 	//************Tutaj umieszczaj kod, który nale¿y wykonaæ po zakoñczeniu pêtli g³ównej************
 	//Usuniêcie tekstury z pamiêci karty graficznej 
 	glDeleteTextures(1, &tex0);
@@ -127,9 +68,9 @@ void myModel3D::freeModel() {
 	glDeleteBuffers(1, &bufIndex);
 	delete sp;
 }
-void myModel3D:: drawModel(glm::mat4 V, glm::mat4 P, glm::mat4 M, float moveX, float moveY, float moveZ,
+void myMesh::drawMesh(glm::mat4 V, glm::mat4 P, glm::mat4 M, float moveX, float moveY, float moveZ,
 	float rotationX, float rotationY, float rotationZ,
-	float rescaleX, float rescaleY, float rescaleZ){
+	float rescaleX, float rescaleY, float rescaleZ) {
 
 	coord_x += moveX;//przesuñ model
 	coord_y += moveY;
@@ -144,7 +85,7 @@ void myModel3D:: drawModel(glm::mat4 V, glm::mat4 P, glm::mat4 M, float moveX, f
 	scale_z *= rescaleZ;
 
 	M = glm::translate(M, glm::vec3(moveX, moveY, moveZ));
-	
+
 	M = glm::rotate(M, angle_x, glm::vec3(0.0f, 1.0f, 0.0f)); //Wylicz macierz modelu
 	M = glm::rotate(M, angle_y, glm::vec3(1.0f, 0.0f, 0.0f)); //Wylicz macierz modelu
 	M = glm::rotate(M, angle_z, glm::vec3(0.0f, 0.0f, 1.0f)); //Wylicz macierz modelu

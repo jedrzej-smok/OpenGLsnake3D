@@ -49,10 +49,7 @@ class myModel3D
 		//funckje rysujace
 		//zmienne i macierze dla wszystkich te same
 		float aspectRatio = 1;
-		glm::mat4 V = glm::lookAt( glm::vec3(0, 0, -12.5), glm::vec3(0, 0, 0), glm::vec3(0.0f, 1.0f, 0.0f)); //Wylicz macierz widoku
-		glm::mat4 P = glm::perspective(50.0f * PI / 180.0f, aspectRatio, 0.01f, 50.0f); //Wylicz macierz rzutowania
-		glm::mat4 M = glm::mat4(1.0f);
-	
+		
 		//zmienne od animacji
 		float coord_x = 0;
 		float coord_y = 0;
@@ -68,7 +65,7 @@ class myModel3D
 
 
 
-		void drawModel( float moveX=0.f, float moveY = 0.f, float moveZ = 0.f,
+		void drawModel(glm::mat4 V, glm::mat4 P, glm::mat4 M, float moveX=0.f, float moveY = 0.f, float moveZ = 0.f,
 			float rotationX=0.f, float rotationY=0.f, float rotationZ = 0.f,
 			float rescaleX=1.0f, float rescaleY = 1.0f, float rescaleZ = 1.0f );
 };

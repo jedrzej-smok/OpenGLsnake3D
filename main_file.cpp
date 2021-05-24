@@ -37,13 +37,20 @@ Place, Fifth Floor, Boston, MA  02110 - 1301  USA
 #include <assimp/scene.h> //scene to reprezentacja calego pliku
 #include <assimp/postprocess.h> //to co mozna zrobic z plikiem
 #include <myModel3D.h>
+#include <myModel3DfewMeshes.h>
+
 
 
 float aspectRatio = 1;
 double frameTime=0;
 float speed_x = 0;
 float speed_y = 0;
+glm::mat4 Vglobal = glm::lookAt(glm::vec3(0, 0, -12.5), glm::vec3(0, 0, 0), glm::vec3(0.0f, 1.0f, 0.0f)); //Wylicz macierz widoku
+glm::mat4 Pglobal = glm::perspective(50.0f * PI / 180.0f, aspectRatio, 0.01f, 50.0f); //Wylicz macierz rzutowania
+glm::mat4 Mglobal = glm::mat4(1.0f);
+
 myModel3D firstModel;
+myModel3DfewMeshes tmpModel;
 
 //Procedura obs³ugi b³êdów
 void error_callback(int error, const char* description) {
@@ -79,15 +86,16 @@ void initOpenGLProgram(GLFWwindow* window) {
 	glfwSetWindowSizeCallback(window,windowResizeCallback);
 	glfwSetKeyCallback(window,keyCallback);
 
-	firstModel.initModel("anvil.obj", "metal.png","sky.png");
-
+	//firstModel.initModel("anvil.obj", "metal.png","sky.png");
+	tmpModel.initModel("apple.obj");
 }
 
 
 //Zwolnienie zasobów zajêtych przez program
 void freeOpenGLProgram(GLFWwindow* window) {
     //************Tutaj umieszczaj kod, który nale¿y wykonaæ po zakoñczeniu pêtli g³ównej************
-	firstModel.freeModel();
+	//firstModel.freeModel();
+	tmpModel.freeModel();
 }
 
 
@@ -98,8 +106,8 @@ void drawScene(GLFWwindow* window) {
 	//************Tutaj umieszczaj kod rysuj¹cy obraz******************
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 //wlasciwa czesc ============================================================
-	firstModel.drawModel(0,0,0,speed_x*frameTime, speed_y*frameTime,0,1,1,1);
-
+	//firstModel.drawModel(Vglobal, Pglobal, Mglobal, 0, 0, 0, speed_x*frameTime, speed_y*frameTime, 0, 1, 1, 1);
+	tmpModel.drawModel3DfewMeshes(Vglobal, Pglobal, Mglobal, 0, 0, 0, speed_x * frameTime, speed_y * frameTime, 0, 1, 1, 1);
 
 //reszta=====================================================================
     glfwSwapBuffers(window); //Przerzuæ tylny bufor na przedni
