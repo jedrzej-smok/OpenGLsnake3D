@@ -117,7 +117,7 @@ void drawScene(GLFWwindow* window) {
 
 int main(void)
 {
-	GLFWwindow* window; //WskaŸnik na obiekt reprezentuj¹cy okno
+	GLFWwindow* window; //WskaŸnik na obiekt reprezentuj¹cy oknom
 
 	glfwSetErrorCallback(error_callback);//Zarejestruj procedurê obs³ugi b³êdów
 
