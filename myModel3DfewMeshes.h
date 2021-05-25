@@ -32,7 +32,7 @@ public:
 	
 	
 	void initModel(const char* pathObj);
-	void manualSetupTexture(const char* tex0, const char* tex1);
+	void manualSetupTexture();
 	void freeModel();
 
 	//funckje rysujace

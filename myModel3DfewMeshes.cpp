@@ -68,7 +68,7 @@ void myModel3DfewMeshes::initModel(const char* pathObj) {
 	//NAJPIERW CZYTAJ OBIEKT XDDDDDDDDDDD
 	//assimp
 	loadModelAssimp(std::string(pathObj));
-	manualSetupTexture("BallDiff.jpg","sky.png");
+	manualSetupTexture();
 
 }
 void myModel3DfewMeshes::freeModel() {
@@ -86,8 +86,8 @@ void myModel3DfewMeshes::drawModel3DfewMeshes(glm::mat4 V, glm::mat4 P, glm::mat
 	}
 
 }
-void myModel3DfewMeshes::manualSetupTexture(const char* t0, const char* t1) {
-	meshes[1].setupMesh("a.png", "sky.png");
-	meshes[0].setupMesh("BallLoopDiff.jpg", "sky.png");
+void myModel3DfewMeshes::manualSetupTexture() {
+	//meshes[1].setupMesh("a.png", "sky.png");
+	meshes[0].setupMesh("modele/aroy.png", "modele/sky.png");
 
 }
