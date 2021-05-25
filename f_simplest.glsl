@@ -22,14 +22,14 @@ void main(void) {
 	//Parametry powierzchni
 	vec4 metal = texture(textureMap0,iTexCoord0); //Pobranie koloru
 	vec4 sky = texture(textureMap1,iTexCoord1); //Pobranie koloru z drugiej jedenostki teksturujacej
-	vec4 kd = mix(metal, sky, 0.3);
-	vec4 ks = vec4(1,1,1,1);
+	vec4 kd = mix(metal, sky, 0.99);
+	vec4 ks = vec4(0.2,0.2,0.2,0.2);
 	
 	//Obliczenie modelu oświetlenia
 	float nl = clamp(dot(mn, ml), 0, 1);
 	float rv = pow(clamp(dot(mr, mv), 0, 1), 50);
 	
 	
-	pixelColor= vec4(kd.rgb * nl, kd.a) + vec4(ks.rgb*rv, 0);
-	
+	//pixelColor= vec4(kd.rgb * nl, kd.a) + vec4(ks.rgb*rv, 0);
+	pixelColor = metal;
 }

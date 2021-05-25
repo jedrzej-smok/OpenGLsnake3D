@@ -24,7 +24,7 @@ public:
 	
 
 	//³adowanie modelu 
-	int numberOfMeshes;
+	int numberOfMeshes=0;
 	std::vector<myMesh> meshes;
 	
 	void loadModelAssimp(std::string path);

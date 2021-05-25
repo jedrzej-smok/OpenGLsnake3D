@@ -45,7 +45,8 @@ float aspectRatio = 1;
 double frameTime=0;
 float speed_x = 0;
 float speed_y = 0;
-glm::mat4 Vglobal = glm::lookAt(glm::vec3(0, 0, -12.5), glm::vec3(0, 0, 0), glm::vec3(0.0f, 1.0f, 0.0f)); //Wylicz macierz widoku
+float speed_z = 0;
+glm::mat4 Vglobal = glm::lookAt(glm::vec3(0, 5, -22.5), glm::vec3(0, 0, 0), glm::vec3(0.0f, 1.0f, 0.0f)); //Wylicz macierz widoku
 glm::mat4 Pglobal = glm::perspective(50.0f * PI / 180.0f, aspectRatio, 0.01f, 50.0f); //Wylicz macierz rzutowania
 glm::mat4 Mglobal = glm::mat4(1.0f);
 
@@ -87,7 +88,7 @@ void initOpenGLProgram(GLFWwindow* window) {
 	glfwSetKeyCallback(window,keyCallback);
 
 	//firstModel.initModel("anvil.obj", "metal.png","sky.png");
-	tmpModel.initModel("apple.obj");
+	tmpModel.initModel("ball.obj");
 }
 
 
@@ -107,7 +108,7 @@ void drawScene(GLFWwindow* window) {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 //wlasciwa czesc ============================================================
 	//firstModel.drawModel(Vglobal, Pglobal, Mglobal, 0, 0, 0, speed_x*frameTime, speed_y*frameTime, 0, 1, 1, 1);
-	tmpModel.drawModel3DfewMeshes(Vglobal, Pglobal, Mglobal, 0, 0, 0, speed_x * frameTime, speed_y * frameTime, 0, 1, 1, 1);
+	tmpModel.drawModel3DfewMeshes(Vglobal, Pglobal, Mglobal, 0, 0, 0, speed_x * frameTime, speed_y * frameTime, 0, 0.5, 0.5, 0.5);
 
 //reszta=====================================================================
     glfwSwapBuffers(window); //Przerzuæ tylny bufor na przedni

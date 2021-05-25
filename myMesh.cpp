@@ -77,14 +77,18 @@ void myMesh::drawMesh(glm::mat4 V, glm::mat4 P, glm::mat4 M, float moveX, float 
 	coord_z += moveZ;
 
 	angle_x += rotationX;//przekrec model
-	angle_y += rotationY;
+	//angle_y += rotationY;
 	angle_z += rotationZ;
+	//==========================================
+	coord_x += sin(angle_x)*rotationY;//rotatation to spped_y
+	coord_z += cos(angle_x) * rotationY;
+	//==========================================
 
 	scale_x *= rescaleX;
 	scale_y *= rescaleY;
 	scale_z *= rescaleZ;
 
-	M = glm::translate(M, glm::vec3(moveX, moveY, moveZ));
+	M = glm::translate(M, glm::vec3(coord_x, coord_y, coord_z));
 
 	M = glm::rotate(M, angle_x, glm::vec3(0.0f, 1.0f, 0.0f)); //Wylicz macierz modelu
 	M = glm::rotate(M, angle_y, glm::vec3(1.0f, 0.0f, 0.0f)); //Wylicz macierz modelu
