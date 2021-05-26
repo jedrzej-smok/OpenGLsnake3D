@@ -52,7 +52,7 @@ glm::mat4 Pglobal = glm::perspective(50.0f * PI / 180.0f, aspectRatio, 0.01f, 50
 glm::mat4 Mglobal = glm::mat4(1.0f);
 
 myModel3D firstModel;
-myModel3DfewMeshes tmpModel;
+//myModel3DfewMeshes tmpModel;
 
 
 //Procedura obs³ugi b³êdów
@@ -90,9 +90,10 @@ void initOpenGLProgram(GLFWwindow* window) {
 	glfwSetKeyCallback(window,keyCallback);
 	sp = new ShaderProgram("v_simplest.glsl", NULL, "f_simplest.glsl");
 	sp->use();
-	tmpModel.setSp(sp);
+	//tmpModel.setSp(sp);
 	//firstModel.initModel("anvil.obj", "metal.png","sky.png");
-	tmpModel.initModel("modele/aroy.obj");
+	firstModel.initModel("modele/aroy.obj", "modele/aroy.png", "modele/sky.png");
+	//tmpModel.initModel("modele/dinoTest.obj", "modele/aroy.png", "modele/sky.png");
 	
 }
 
@@ -100,8 +101,8 @@ void initOpenGLProgram(GLFWwindow* window) {
 //Zwolnienie zasobów zajêtych przez program
 void freeOpenGLProgram(GLFWwindow* window) {
     //************Tutaj umieszczaj kod, który nale¿y wykonaæ po zakoñczeniu pêtli g³ównej************
-	//firstModel.freeModel();
-	tmpModel.freeModel();
+	firstModel.freeModel();
+	//tmpModel.freeModel();
 	delete sp;
 
 }
@@ -114,8 +115,8 @@ void drawScene(GLFWwindow* window) {
 	//************Tutaj umieszczaj kod rysuj¹cy obraz******************
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 //wlasciwa czesc ============================================================
-	//firstModel.drawModel(Vglobal, Pglobal, Mglobal, 0, 0, 0, speed_x*frameTime, speed_y*frameTime, 0,1, 1, 1);
-	tmpModel.drawModel3DfewMeshes(Vglobal, Pglobal, Mglobal, 0, 0, 0, speed_x * frameTime, speed_y * frameTime, 0, 0.2, 0.2, 0.2);
+	firstModel.drawModel(Vglobal, Pglobal, Mglobal, 0, 0, 0, speed_x*frameTime, speed_y*frameTime, 0,1, 1, 1);
+	//tmpModel.drawModel3DfewMeshes(Vglobal, Pglobal, Mglobal, 0, 0, 0, speed_x * frameTime, speed_y * frameTime, 0, 0.2, 0.2, 0.2);
 
 //reszta=====================================================================
     glfwSwapBuffers(window); //Przerzuæ tylny bufor na przedni
