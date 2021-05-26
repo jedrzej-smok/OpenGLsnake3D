@@ -20,7 +20,7 @@ void myModel3DfewMeshes::loadModelAssimp(std::string path)
 
 	aiMesh* mesh = scene->mMeshes[0];//mamy jeden model
 	
-	for (int m = 0; m < scene->mNumMeshes; m++) {
+	for (int m = 0; m < numberOfMeshes; m++) {
 		mesh = scene->mMeshes[m];
 		std::cout << "Mesh nr:" << m << "\n";
 		unsigned int liczba_zest = mesh->GetNumUVChannels();
@@ -32,7 +32,7 @@ void myModel3DfewMeshes::loadModelAssimp(std::string path)
 			}
 		}
 		//wczytanie mesha==================================================================================================================
-		myMesh myMeshtmp;
+		myMesh myMeshtmp(spModel);
 		for (int i = 0; i < mesh->mNumVertices; i++) {
 			aiVector3D vertex = mesh->mVertices[i];
 			myMeshtmp.verts.push_back(glm::vec4(vertex.x, vertex.y, vertex.z, 1));//bo wierzchoelk

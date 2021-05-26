@@ -40,6 +40,7 @@ Place, Fifth Floor, Boston, MA  02110 - 1301  USA
 #include <myModel3DfewMeshes.h>
 
 
+ShaderProgram* sp;
 
 float aspectRatio = 1;
 double frameTime=0;
@@ -52,6 +53,7 @@ glm::mat4 Mglobal = glm::mat4(1.0f);
 
 myModel3D firstModel;
 myModel3DfewMeshes tmpModel;
+
 
 //Procedura obs³ugi b³êdów
 void error_callback(int error, const char* description) {
@@ -86,9 +88,12 @@ void initOpenGLProgram(GLFWwindow* window) {
 	glEnable(GL_DEPTH_TEST);
 	glfwSetWindowSizeCallback(window,windowResizeCallback);
 	glfwSetKeyCallback(window,keyCallback);
-
+	sp = new ShaderProgram("v_simplest.glsl", NULL, "f_simplest.glsl");
+	sp->use();
+	tmpModel.setSp(sp);
 	//firstModel.initModel("anvil.obj", "metal.png","sky.png");
 	tmpModel.initModel("modele/aroy.obj");
+	
 }
 
 
@@ -97,6 +102,8 @@ void freeOpenGLProgram(GLFWwindow* window) {
     //************Tutaj umieszczaj kod, który nale¿y wykonaæ po zakoñczeniu pêtli g³ównej************
 	//firstModel.freeModel();
 	tmpModel.freeModel();
+	delete sp;
+
 }
 
 

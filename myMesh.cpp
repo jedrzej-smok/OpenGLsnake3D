@@ -33,7 +33,7 @@ void myMesh::setupMesh( const char* pathTex0, const char* pathTex1) {
 	tex0 = readTexture(pathTex0);
 	tex1 = readTexture(pathTex1);//druga tekstura
 	//program cieniujacy
-	sp = new ShaderProgram("v_simplest.glsl", NULL, "f_simplest.glsl");
+	//sp = new ShaderProgram("v_simplest.glsl", NULL, "f_simplest.glsl");
 	//VBO
 	numberOfVerts = verts.size();
 	numberOfIndex = indices.size();
@@ -66,7 +66,7 @@ void myMesh::freeMesh() {
 	glDeleteBuffers(1, &bufNormal);
 	glDeleteBuffers(1, &bufTexCoord);
 	glDeleteBuffers(1, &bufIndex);
-	delete sp;
+	//delete sp;
 }
 void myMesh::drawMesh(glm::mat4 V, glm::mat4 P, glm::mat4 M, float moveX, float moveY, float moveZ,
 	float rotationX, float rotationY, float rotationZ,
@@ -96,40 +96,40 @@ void myMesh::drawMesh(glm::mat4 V, glm::mat4 P, glm::mat4 M, float moveX, float 
 
 	M = glm::scale(M, glm::vec3(rescaleX, rescaleY, rescaleZ));
 
-
+	
 
 
 
 	//STANDARDOWE URUCHAMIANIE=====================================================================================================
-	sp->use();//Aktywacja programu cieniuj¹cego
+	//sp->use();//Aktywacja programu cieniuj¹cego
 	//Przeslij parametry programu cieniuj¹cego do karty graficznej
-	glUniformMatrix4fv(sp->u("P"), 1, false, glm::value_ptr(P));
-	glUniformMatrix4fv(sp->u("V"), 1, false, glm::value_ptr(V));
-	glUniformMatrix4fv(sp->u("M"), 1, false, glm::value_ptr(M));
+	glUniformMatrix4fv(spOne->u("P"), 1, false, glm::value_ptr(P));
+	glUniformMatrix4fv(spOne->u("V"), 1, false, glm::value_ptr(V));
+	glUniformMatrix4fv(spOne->u("M"), 1, false, glm::value_ptr(M));
 
-	glEnableVertexAttribArray(sp->a("vertex"));  //W³¹cz przesy³anie danych do atrybutu vertex
+	glEnableVertexAttribArray(spOne->a("vertex"));  //W³¹cz przesy³anie danych do atrybutu vertex
 	glBindBuffer(GL_ARRAY_BUFFER, bufVertex);//chyba ten bufor aktywny
-	glVertexAttribPointer(sp->a("vertex"), 4, GL_FLOAT, false, 0, NULL); //Wska¿ tablicê z danymi dla atrybutu vertex; zmiana na VBO
+	glVertexAttribPointer(spOne->a("vertex"), 4, GL_FLOAT, false, 0, NULL); //Wska¿ tablicê z danymi dla atrybutu vertex; zmiana na VBO
 
-	glEnableVertexAttribArray(sp->a("normal"));  //W³¹cz przesy³anie danych do atrybutu normal
+	glEnableVertexAttribArray(spOne->a("normal"));  //W³¹cz przesy³anie danych do atrybutu normal
 	glBindBuffer(GL_ARRAY_BUFFER, bufNormal);//chyba ten bufor aktywny
-	glVertexAttribPointer(sp->a("normal"), 4, GL_FLOAT, false, 0, NULL); //Wska¿ tablicê z danymi dla atrybutu normal
+	glVertexAttribPointer(spOne->a("normal"), 4, GL_FLOAT, false, 0, NULL); //Wska¿ tablicê z danymi dla atrybutu normal
 
-	glEnableVertexAttribArray(sp->a("texCoord0"));
+	glEnableVertexAttribArray(spOne->a("texCoord0"));
 	glBindBuffer(GL_ARRAY_BUFFER, bufTexCoord);//chyba ten bufor aktywny
-	glVertexAttribPointer(sp->a("texCoord0"), 2, GL_FLOAT, false, 0, NULL);//odpowiednia tablica
+	glVertexAttribPointer(spOne->a("texCoord0"), 2, GL_FLOAT, false, 0, NULL);//odpowiednia tablica
 	glBindBuffer(GL_ARRAY_BUFFER, 0);//sprzatanie
 
 
 	//CIENIOWANIE
 	//Powi¹zanie zmiennej typu sampler2D z jednostk¹ teksturuj¹ca, tu zerowa jednostka teksturujaca z fs
-	glUniform1i(sp->u("textureMap0"), 0); //drawScene
+	glUniform1i(spOne->u("textureMap0"), 0); //drawScene
 
 	//Przed glDrawArrays w drawScene Przypisanie tekstury do jednostki teksturuj¹ce
 	glActiveTexture(GL_TEXTURE0);//aktywacja jeddnostki teksturujacej
 	glBindTexture(GL_TEXTURE_2D, tex0);//przypiasanie tekstury do jednostki
 
-	glUniform1i(sp->u("textureMap1"), 1); //drawScene
+	glUniform1i(spOne->u("textureMap1"), 1); //drawScene
 	glActiveTexture(GL_TEXTURE1);//aktywacja jeddnostki teksturujacej
 	glBindTexture(GL_TEXTURE_2D, tex1);//przypiasanie tekstury do jednostki
 
@@ -140,7 +140,7 @@ void myMesh::drawMesh(glm::mat4 V, glm::mat4 P, glm::mat4 M, float moveX, float 
 	glDrawElements(GL_TRIANGLES, numberOfIndex, GL_UNSIGNED_INT, NULL); //PO ZMIANIA na VBO
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);//sprzatanie
 
-	glDisableVertexAttribArray(sp->a("vertex"));  //Wy³¹cz przesy³anie danych do atrybutu vertex
-	glDisableVertexAttribArray(sp->a("normal"));  //Wy³¹cz przesy³anie danych do atrybutu normal
-	glDisableVertexAttribArray(sp->a("texCoord0"));
+	glDisableVertexAttribArray(spOne->a("vertex"));  //Wy³¹cz przesy³anie danych do atrybutu vertex
+	glDisableVertexAttribArray(spOne->a("normal"));  //Wy³¹cz przesy³anie danych do atrybutu normal
+	glDisableVertexAttribArray(spOne->a("texCoord0"));
 }

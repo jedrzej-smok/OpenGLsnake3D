@@ -17,7 +17,10 @@
 class myMesh
 {
 public:
-	myMesh(){};
+	ShaderProgram* spOne;
+	myMesh(ShaderProgram* tmp){
+		spOne = tmp;
+	};
 	~myMesh() {
 	}
 	//odczytanie tekstur
@@ -42,7 +45,7 @@ public:
 	GLuint bufNormal;//identyfiakator bufora z normalnymi
 	GLuint bufTexCoord;//identyfiakator bufora z wspTeksturowania
 	GLuint bufIndex;//identyfiakator bufora z indeksami
-	ShaderProgram* sp;
+	
 	void setupMesh(const char* pathTex0, const char* pathTex1);
 	void freeMesh();
 

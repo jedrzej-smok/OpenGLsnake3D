@@ -26,7 +26,9 @@
     <ClInclude Include="myModel3D.h" />
     <ClInclude Include="myModel3DfewMeshes.h" />
     <ClInclude Include="myTeapot.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="shaderprogram.h" />
+    <ClInclude Include="sp.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="lodepng.cpp" />
@@ -39,6 +41,9 @@
   <ItemGroup>
     <None Include="f_simplest.glsl" />
     <None Include="v_simplest.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="pl_szkielet_06_win.rc" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

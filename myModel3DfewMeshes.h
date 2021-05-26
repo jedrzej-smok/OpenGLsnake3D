@@ -17,12 +17,14 @@
 class myModel3DfewMeshes
 {
 public:
-	myModel3DfewMeshes() {
-	};
+	ShaderProgram* spModel;
+	myModel3DfewMeshes() {};
 	~myModel3DfewMeshes() {
 	}
 	
-
+	void setSp(ShaderProgram* a) {
+		spModel = a;
+	};
 	//³adowanie modelu 
 	int numberOfMeshes=0;
 	std::vector<myMesh> meshes;
