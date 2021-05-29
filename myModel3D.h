@@ -51,6 +51,7 @@ class myModel3D
 		float aspectRatio = 1;
 		
 		//zmienne od animacji
+		glm::mat4 matrixM;
 		float coord_x = 0;
 		float coord_y = 0;
 		float coord_z = 0;

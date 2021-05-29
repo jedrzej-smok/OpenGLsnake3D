@@ -97,10 +97,10 @@ void initOpenGLProgram(GLFWwindow* window) {
 	//tmpModel.initModel("modele/dinoTest.obj", "modele/aroy.png", "modele/sky.png");
 	balls.push_back(myModel3D());
 	balls[0].initModel("modele/ball.obj", "modele/zielony.png", "modele/sky.png");
-	balls[0].setupModel(0, 0, 0, 0, 0, 0, 1, 1, 1);
+	balls[0].setupModel(0, 0, PI, 0, 0, 0, 1, 1, 1);
 
 	head.initModel("modele/minidragon.obj", "modele/minidragon.png", "modele/sky.png");
-	head.setupModel(2,1.8f, 0, -PI/2, 0, 0, 0.2f, 0.2f, 0.2f);
+	head.setupModel(0,1, 2.f, PI, 0, 0, 0.2f, 0.2f, 0.2f);
 }
 
 
@@ -130,7 +130,7 @@ void drawScene(GLFWwindow* window) {
 
 
 	balls[0].drawModel(Vglobal, Pglobal, Mglobal, (sin(balls[0].angle_x))*speed_y*frameTime,0, (cos(balls[0].angle_x))*speed_y*frameTime, speed_x*frameTime, 0, 0, 1, 1, 1);
-	head.drawModel(Vglobal, Pglobal, Mglobal, (sin(balls[0].angle_x)) * speed_y * frameTime, 0, (cos(balls[0].angle_x)) * speed_y * frameTime, speed_x * frameTime, 0, 0, 1,1,1);
+	head.drawModel(Vglobal, Pglobal, balls[0].matrixM, 0,0,0,0, 0, 0, 1,1,1);
 	
 
 

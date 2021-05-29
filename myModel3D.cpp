@@ -172,18 +172,19 @@ void myModel3D:: drawModel(glm::mat4 V, glm::mat4 P, glm::mat4 M, float moveX, f
 	scale_y *= rescaleY;
 	scale_z *= rescaleZ;
 
-	M = glm::translate(M, glm::vec3(coord_x, coord_y, coord_z));//Wylicz macierz modelu
+	matrixM = M;//przypisanie M z drawModel
+	matrixM = glm::translate(matrixM, glm::vec3(coord_x, coord_y, coord_z));//Wylicz macierz modelu
 	
-	M = glm::rotate(M, angle_x, glm::vec3(0.0f, 1.0f, 0.0f)); //Wylicz macierz modelu
-	M = glm::rotate(M, angle_y, glm::vec3(1.0f, 0.0f, 0.0f)); //Wylicz macierz modelu
-	M = glm::rotate(M, angle_z, glm::vec3(0.0f, 0.0f, 1.0f)); //Wylicz macierz modelu
+	matrixM = glm::rotate(matrixM, angle_x, glm::vec3(0.0f, 1.0f, 0.0f)); //Wylicz macierz modelu
+	matrixM = glm::rotate(matrixM, angle_y, glm::vec3(1.0f, 0.0f, 0.0f)); //Wylicz macierz modelu
+	matrixM = glm::rotate(matrixM, angle_z, glm::vec3(0.0f, 0.0f, 1.0f)); //Wylicz macierz modelu
 
-	M = glm::scale(M, glm::vec3(scale_x, scale_y, scale_z)); //Wylicz macierz modelu
+	matrixM = glm::scale(matrixM, glm::vec3(scale_x, scale_y, scale_z)); //Wylicz macierz modelu
 
-	//std::cout << M[0].x << "," << M[0].y << "," << M[0].z << ","<< M[0].w  << std::endl;
-	//std::cout << M[1].x << "," << M[1].y << "," << M[1].z << ","<< M[1].w  << std::endl;
-	//std::cout << M[2].x << "," << M[2].y << "," << M[2].z << ","<< M[2].w  << std::endl;
-	//std::cout << M[3].x << "," << M[3].y << "," << M[3].z << ","<< M[3].w  << std::endl;//zmienia wspolrzedna xDDDDDDDDDDDDDD
+	//std::cout << matrixM[0].x << "," << matrixM[0].y << "," << matrixM[0].z << ","<< matrixM[0].w  << std::endl;
+	//std::cout << matrixM[1].x << "," << matrixM[1].y << "," << matrixM[1].z << ","<< matrixM[1].w  << std::endl;
+	//std::cout << matrixM[2].x << "," << matrixM[2].y << "," << matrixM[2].z << ","<< matrixM[2].w  << std::endl;
+	//std::cout << matrixM[3].x << "," << matrixM[3].y << "," << matrixM[3].z << ","<< matrixM[3].w  << std::endl;//zmienia wspolrzedna xDDDDDDDDDDDDDD
 	//std::cout << "\n\n\n";
 
 	//STANDARDOWE URUCHAMIANIE=====================================================================================================
@@ -191,7 +192,7 @@ void myModel3D:: drawModel(glm::mat4 V, glm::mat4 P, glm::mat4 M, float moveX, f
 	//Przeslij parametry programu cieniuj¹cego do karty graficznej
 	glUniformMatrix4fv(sp->u("P"), 1, false, glm::value_ptr(P));
 	glUniformMatrix4fv(sp->u("V"), 1, false, glm::value_ptr(V));
-	glUniformMatrix4fv(sp->u("M"), 1, false, glm::value_ptr(M));
+	glUniformMatrix4fv(sp->u("M"), 1, false, glm::value_ptr(matrixM));
 
 	glEnableVertexAttribArray(sp->a("vertex"));  //W³¹cz przesy³anie danych do atrybutu vertex
 	glBindBuffer(GL_ARRAY_BUFFER, bufVertex);//chyba ten bufor aktywny
