@@ -92,7 +92,7 @@ void initOpenGLProgram(GLFWwindow* window) {
 	sp->use();
 	//tmpModel.setSp(sp);
 	//firstModel.initModel("anvil.obj", "metal.png","sky.png");
-	firstModel.initModel("modele/aroy.obj", "modele/aroy.png", "modele/sky.png");
+	firstModel.initModel("modele/ball.obj", "modele/zielony.png", "modele/sky.png");
 	//tmpModel.initModel("modele/dinoTest.obj", "modele/aroy.png", "modele/sky.png");
 	
 }
@@ -115,7 +115,7 @@ void drawScene(GLFWwindow* window) {
 	//************Tutaj umieszczaj kod rysuj¹cy obraz******************
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 //wlasciwa czesc ============================================================
-	firstModel.drawModel(Vglobal, Pglobal, Mglobal, 0, 0, 0, speed_x*frameTime, speed_y*frameTime, 0,1, 1, 1);
+	firstModel.drawModel(Vglobal, Pglobal, Mglobal, 0, 0, 0, speed_x*frameTime, speed_y*frameTime, 0,3,3, 3);
 	//tmpModel.drawModel3DfewMeshes(Vglobal, Pglobal, Mglobal, 0, 0, 0, speed_x * frameTime, speed_y * frameTime, 0, 0.2, 0.2, 0.2);
 
 //reszta=====================================================================

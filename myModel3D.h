@@ -30,7 +30,7 @@ class myModel3D
 		std::vector<unsigned int> indices;
 		int numberOfVerts;
 		int numberOfIndex;
-		int numberOfMeshs;
+		int numberOfMeshes;
 		int numberOfTexs;
 		void loadModelAssimp(std::string path);
 
