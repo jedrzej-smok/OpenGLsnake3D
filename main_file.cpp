@@ -97,20 +97,22 @@ void initOpenGLProgram(GLFWwindow* window) {
 	//tmpModel.initModel("modele/dinoTest.obj", "modele/aroy.png", "modele/sky.png");
 	balls.push_back(myModel3D());
 	balls[0].initModel("modele/ball.obj", "modele/zielony.png", "modele/sky.png");
+	balls[0].setupModel(0, 0, 0, 0, 0, 0, 1, 1, 1);
 
+	head.initModel("modele/minidragon.obj", "modele/minidragon.png", "modele/sky.png");
+	head.setupModel(2,1.8f, 0, -PI/2, 0, 0, 0.2f, 0.2f, 0.2f);
 }
 
 
 //Zwolnienie zasobów zajêtych przez program
 void freeOpenGLProgram(GLFWwindow* window) {
     //************Tutaj umieszczaj kod, który nale¿y wykonaæ po zakoñczeniu pêtli g³ównej************
-	//firstModel.freeModel();
-	//tmpModel.freeModel();
-
-
+	
 	for (int i = 0; i < balls.size(); i++) {
 		balls[0].freeModel();
 	}
+	head.freeModel();
+	
 	//===========
 	delete sp;
 }
@@ -126,8 +128,10 @@ void drawScene(GLFWwindow* window) {
 	//firstModel.drawModel(Vglobal, Pglobal, Mglobal, (sin(firstModel.angle_x))*speed_y*frameTime,0, (cos(firstModel.angle_x))*speed_y*frameTime, speed_x*frameTime, 0, 0,3,3, 3);
 	//tmpModel.drawModel3DfewMeshes(Vglobal, Pglobal, Mglobal, 0, 0, 0, speed_x * frameTime, speed_y * frameTime, 0, 0.2, 0.2, 0.2);
 
-	balls[0].drawModel(Vglobal, Pglobal, Mglobal, (sin(balls[0].angle_x))*speed_y*frameTime,0, (cos(balls[0].angle_x))*speed_y*frameTime, speed_x*frameTime, 0, 0,3,3, 3);
 
+	balls[0].drawModel(Vglobal, Pglobal, Mglobal, (sin(balls[0].angle_x))*speed_y*frameTime,0, (cos(balls[0].angle_x))*speed_y*frameTime, speed_x*frameTime, 0, 0, 1, 1, 1);
+	head.drawModel(Vglobal, Pglobal, Mglobal, (sin(balls[0].angle_x)) * speed_y * frameTime, 0, (cos(balls[0].angle_x)) * speed_y * frameTime, speed_x * frameTime, 0, 0, 1,1,1);
+	
 
 
 

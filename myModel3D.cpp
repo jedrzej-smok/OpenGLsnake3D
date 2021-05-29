@@ -178,7 +178,7 @@ void myModel3D:: drawModel(glm::mat4 V, glm::mat4 P, glm::mat4 M, float moveX, f
 	M = glm::rotate(M, angle_y, glm::vec3(1.0f, 0.0f, 0.0f)); //Wylicz macierz modelu
 	M = glm::rotate(M, angle_z, glm::vec3(0.0f, 0.0f, 1.0f)); //Wylicz macierz modelu
 
-	M = glm::scale(M, glm::vec3(rescaleX, rescaleY, rescaleZ)); //Wylicz macierz modelu
+	M = glm::scale(M, glm::vec3(scale_x, scale_y, scale_z)); //Wylicz macierz modelu
 
 	//std::cout << M[0].x << "," << M[0].y << "," << M[0].z << ","<< M[0].w  << std::endl;
 	//std::cout << M[1].x << "," << M[1].y << "," << M[1].z << ","<< M[1].w  << std::endl;
