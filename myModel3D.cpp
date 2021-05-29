@@ -127,6 +127,23 @@ void myModel3D::initModel(const char* pathObj, const char* pathTex0, const char*
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);//sprzatanie
 	//koniec VBO
 }
+
+void myModel3D::setupModel(float moveX , float moveY,  float moveZ,
+	float rotationX, float rotationY, float rotationZ,
+	float rescaleX , float rescaleY , float rescaleZ ) {
+	coord_x = moveX;//przesuñ model
+	coord_y = moveY;
+	coord_z = moveZ;
+
+	angle_x = rotationX;//przekrec model
+	angle_y = rotationY;
+	angle_z = rotationZ;
+
+	scale_x = rescaleX;
+	scale_y = rescaleY;
+	scale_z = rescaleZ;
+}
+
 void myModel3D::freeModel() {
 	//************Tutaj umieszczaj kod, który nale¿y wykonaæ po zakoñczeniu pêtli g³ównej************
 	//Usuniêcie tekstury z pamiêci karty graficznej 
@@ -155,17 +172,19 @@ void myModel3D:: drawModel(glm::mat4 V, glm::mat4 P, glm::mat4 M, float moveX, f
 	scale_y *= rescaleY;
 	scale_z *= rescaleZ;
 
-	M = glm::translate(M, glm::vec3(moveX, moveY, moveZ));
+	M = glm::translate(M, glm::vec3(coord_x, coord_y, coord_z));//Wylicz macierz modelu
 	
 	M = glm::rotate(M, angle_x, glm::vec3(0.0f, 1.0f, 0.0f)); //Wylicz macierz modelu
 	M = glm::rotate(M, angle_y, glm::vec3(1.0f, 0.0f, 0.0f)); //Wylicz macierz modelu
 	M = glm::rotate(M, angle_z, glm::vec3(0.0f, 0.0f, 1.0f)); //Wylicz macierz modelu
 
-	M = glm::scale(M, glm::vec3(rescaleX, rescaleY, rescaleZ));
+	M = glm::scale(M, glm::vec3(rescaleX, rescaleY, rescaleZ)); //Wylicz macierz modelu
 
-
-
-
+	//std::cout << M[0].x << "," << M[0].y << "," << M[0].z << ","<< M[0].w  << std::endl;
+	//std::cout << M[1].x << "," << M[1].y << "," << M[1].z << ","<< M[1].w  << std::endl;
+	//std::cout << M[2].x << "," << M[2].y << "," << M[2].z << ","<< M[2].w  << std::endl;
+	//std::cout << M[3].x << "," << M[3].y << "," << M[3].z << ","<< M[3].w  << std::endl;//zmienia wspolrzedna xDDDDDDDDDDDDDD
+	//std::cout << "\n\n\n";
 
 	//STANDARDOWE URUCHAMIANIE=====================================================================================================
 	sp->use();//Aktywacja programu cieniuj¹cego

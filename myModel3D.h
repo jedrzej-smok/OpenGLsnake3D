@@ -63,7 +63,9 @@ class myModel3D
 		float scale_y = 1.0f;
 		float scale_z = 1.0f;
 
-
+		void setupModel(float moveX = 0.f, float moveY = 0.f, float moveZ = 0.f,
+			float rotationX = 0.f, float rotationY = 0.f, float rotationZ = 0.f,
+			float rescaleX = 1.0f, float rescaleY = 1.0f, float rescaleZ = 1.0f );
 
 		void drawModel(glm::mat4 V, glm::mat4 P, glm::mat4 M, float moveX=0.f, float moveY = 0.f, float moveZ = 0.f,
 			float rotationX=0.f, float rotationY=0.f, float rotationZ = 0.f,

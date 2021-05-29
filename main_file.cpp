@@ -115,7 +115,7 @@ void drawScene(GLFWwindow* window) {
 	//************Tutaj umieszczaj kod rysuj¹cy obraz******************
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 //wlasciwa czesc ============================================================
-	firstModel.drawModel(Vglobal, Pglobal, Mglobal, 0, 0, 0, speed_x*frameTime, speed_y*frameTime, 0,3,3, 3);
+	firstModel.drawModel(Vglobal, Pglobal, Mglobal, (sin(firstModel.angle_x))*speed_y*frameTime,0, (cos(firstModel.angle_x))*speed_y*frameTime, speed_x*frameTime, 0, 0,3,3, 3);
 	//tmpModel.drawModel3DfewMeshes(Vglobal, Pglobal, Mglobal, 0, 0, 0, speed_x * frameTime, speed_y * frameTime, 0, 0.2, 0.2, 0.2);
 
 //reszta=====================================================================
