@@ -51,7 +51,9 @@ glm::mat4 Vglobal = glm::lookAt(glm::vec3(0, 25, -22.5), glm::vec3(0, 0, 0), glm
 glm::mat4 Pglobal = glm::perspective(50.0f * PI / 180.0f, aspectRatio, 0.01f, 50.0f); //Wylicz macierz rzutowania
 glm::mat4 Mglobal = glm::mat4(1.0f);
 
-myModel3D firstModel;
+//modele============================================================
+myModel3D head;
+std::vector<myModel3D> balls;//balls[0] to glowny element
 //myModel3DfewMeshes tmpModel;
 
 
@@ -90,21 +92,27 @@ void initOpenGLProgram(GLFWwindow* window) {
 	glfwSetKeyCallback(window,keyCallback);
 	sp = new ShaderProgram("v_simplest.glsl", NULL, "f_simplest.glsl");
 	sp->use();
-	//tmpModel.setSp(sp);
 	//firstModel.initModel("anvil.obj", "metal.png","sky.png");
-	firstModel.initModel("modele/ball.obj", "modele/zielony.png", "modele/sky.png");
+	//firstModel.initModel("modele/ball.obj", "modele/zielony.png", "modele/sky.png");
 	//tmpModel.initModel("modele/dinoTest.obj", "modele/aroy.png", "modele/sky.png");
-	
+	balls.push_back(myModel3D());
+	balls[0].initModel("modele/ball.obj", "modele/zielony.png", "modele/sky.png");
+
 }
 
 
 //Zwolnienie zasobów zajêtych przez program
 void freeOpenGLProgram(GLFWwindow* window) {
     //************Tutaj umieszczaj kod, który nale¿y wykonaæ po zakoñczeniu pêtli g³ównej************
-	firstModel.freeModel();
+	//firstModel.freeModel();
 	//tmpModel.freeModel();
-	delete sp;
 
+
+	for (int i = 0; i < balls.size(); i++) {
+		balls[0].freeModel();
+	}
+	//===========
+	delete sp;
 }
 
 
@@ -115,8 +123,14 @@ void drawScene(GLFWwindow* window) {
 	//************Tutaj umieszczaj kod rysuj¹cy obraz******************
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 //wlasciwa czesc ============================================================
-	firstModel.drawModel(Vglobal, Pglobal, Mglobal, (sin(firstModel.angle_x))*speed_y*frameTime,0, (cos(firstModel.angle_x))*speed_y*frameTime, speed_x*frameTime, 0, 0,3,3, 3);
+	//firstModel.drawModel(Vglobal, Pglobal, Mglobal, (sin(firstModel.angle_x))*speed_y*frameTime,0, (cos(firstModel.angle_x))*speed_y*frameTime, speed_x*frameTime, 0, 0,3,3, 3);
 	//tmpModel.drawModel3DfewMeshes(Vglobal, Pglobal, Mglobal, 0, 0, 0, speed_x * frameTime, speed_y * frameTime, 0, 0.2, 0.2, 0.2);
+
+	balls[0].drawModel(Vglobal, Pglobal, Mglobal, (sin(balls[0].angle_x))*speed_y*frameTime,0, (cos(balls[0].angle_x))*speed_y*frameTime, speed_x*frameTime, 0, 0,3,3, 3);
+
+
+
+
 
 //reszta=====================================================================
     glfwSwapBuffers(window); //Przerzuæ tylny bufor na przedni
