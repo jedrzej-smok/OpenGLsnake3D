@@ -50,6 +50,8 @@ float speed_z = 0;
 glm::mat4 Vglobal = glm::lookAt(glm::vec3(0, 25, -22.5), glm::vec3(0, 0, 0), glm::vec3(0.0f, 1.0f, 0.0f)); //Wylicz macierz widoku
 glm::mat4 Pglobal = glm::perspective(50.0f * PI / 180.0f, aspectRatio, 0.01f, 50.0f); //Wylicz macierz rzutowania
 glm::mat4 Mglobal = glm::mat4(1.0f);
+bool collisionWithApple = false;
+float ballSize = 5.0f;
 
 //modele============================================================
 myModel3D head;
@@ -64,10 +66,11 @@ void error_callback(int error, const char* description) {
 
 void keyCallback(GLFWwindow* window,int key,int scancode,int action,int mods) {
     if (action==GLFW_PRESS) {
-        if (key==GLFW_KEY_LEFT) speed_x=-PI/2;
-        if (key==GLFW_KEY_RIGHT) speed_x=PI/2;
+        if (key==GLFW_KEY_LEFT) speed_x=PI/2;
+        if (key==GLFW_KEY_RIGHT) speed_x=-PI/2;
         if (key==GLFW_KEY_UP) speed_y=PI/2;
         if (key==GLFW_KEY_DOWN) speed_y=-PI/2;
+        if (key==GLFW_KEY_A) collisionWithApple=true;
     }
     if (action==GLFW_RELEASE) {
         if (key==GLFW_KEY_LEFT) speed_x=0;
@@ -108,7 +111,7 @@ void initOpenGLProgram(GLFWwindow* window) {
 void freeOpenGLProgram(GLFWwindow* window) {
     //************Tutaj umieszczaj kod, który nale¿y wykonaæ po zakoñczeniu pêtli g³ównej************
 	
-	for (int i = 0; i < balls.size(); i++) {
+	for (int i = 0; i < 1; i++) {
 		balls[0].freeModel();
 	}
 	head.freeModel();
@@ -131,15 +134,34 @@ void drawScene(GLFWwindow* window) {
 
 	balls[0].drawModel(Vglobal, Pglobal, Mglobal, (sin(balls[0].angle_x))*speed_y*frameTime,0, (cos(balls[0].angle_x))*speed_y*frameTime, speed_x*frameTime, 0, 0, 1, 1, 1);
 	head.drawModel(Vglobal, Pglobal, balls[0].matrixM, 0,0,0,0, 0, 0, 1,1,1);
+	for (int b = 1; b < balls.size(); b++) {
+		balls[b].drawModel(Vglobal, Pglobal, balls[b - 1].matrixM, 0, 0, 0, 0, 0, 0, 1, 1, 1);
+	}
 	
-
 
 
 
 //reszta=====================================================================
     glfwSwapBuffers(window); //Przerzuæ tylny bufor na przedni
 }
+void addball() {
+	if (collisionWithApple) {
+		if (balls.size() == 1) {//jest jedna kula
+			balls.push_back(myModel3D());
+			balls.back().initModel("modele/ball.obj", "modele/zielony.png", "modele/sky.png");
 
+			balls.back().setupModel(-sin(balls[0].angle_x)*ballSize, 0, -cos(balls[0].angle_x)*ballSize, 0,0,0, 1, 1, 1);
+			std::cout << "balls[0].angle_x"<<balls[0].angle_x << "\n";
+			std::cout << "-sin(balls[0].angle_x)*ballSize:" << -sin(balls[0].angle_x) * ballSize<<"\n";
+			std::cout << "-cos(balls[0].angle_x)*ballSize:" << -cos(balls[0].angle_x) * ballSize << "\n";
+		}
+		else {
+
+		}
+		std::cout << "collisionWithApple" << std::endl;
+		collisionWithApple = false;
+	}
+}
 
 int main(void)
 {
@@ -180,6 +202,9 @@ int main(void)
 		drawScene(window); //Wykonaj procedurê rysuj¹c¹
 		glfwPollEvents(); //Wykonaj procedury callback w zaleznoœci od zdarzeñ jakie zasz³y.
 		
+		//=======================================
+		//najpierw detect potem
+		addball();
 	}
 
 	freeOpenGLProgram(window);
