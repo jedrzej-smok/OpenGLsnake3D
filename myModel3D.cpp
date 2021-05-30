@@ -181,11 +181,12 @@ void myModel3D:: drawModel(glm::mat4 V, glm::mat4 P, glm::mat4 M, float moveX, f
 
 	matrixM = glm::scale(matrixM, glm::vec3(scale_x, scale_y, scale_z)); //Wylicz macierz modelu
 
-	//std::cout << matrixM[0].x << "," << matrixM[0].y << "," << matrixM[0].z << ","<< matrixM[0].w  << std::endl;
-	//std::cout << matrixM[1].x << "," << matrixM[1].y << "," << matrixM[1].z << ","<< matrixM[1].w  << std::endl;
-	//std::cout << matrixM[2].x << "," << matrixM[2].y << "," << matrixM[2].z << ","<< matrixM[2].w  << std::endl;
-	//std::cout << matrixM[3].x << "," << matrixM[3].y << "," << matrixM[3].z << ","<< matrixM[3].w  << std::endl;//zmienia wspolrzedna xDDDDDDDDDDDDDD
-	//std::cout << "\n\n\n";
+	
+	//dla elementow hierarchicznych
+	world_coord_x = matrixM[3].x;
+	world_coord_y = matrixM[3].y;
+	world_coord_z = matrixM[3].z;
+
 
 	//STANDARDOWE URUCHAMIANIE=====================================================================================================
 	sp->use();//Aktywacja programu cieniuj¹cego
