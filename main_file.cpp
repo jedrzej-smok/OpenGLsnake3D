@@ -137,7 +137,10 @@ void drawScene(GLFWwindow* window) {
 	for (int b = 1; b < balls.size(); b++) {
 		balls[b].drawModel(Vglobal, Pglobal, balls[b - 1].matrixM, 0, 0, 0, 0, 0, 0, 1, 1, 1);
 	}
-	
+	std::cout << "coord_x:" << balls[0].coord_x << ", coord_z:" << balls[0].coord_z << "\n";
+	std::cout << "balls[0].angle_x: " << balls[0].angle_x << "\n";
+	std::cout << "-sin(balls[0].angle_x)*ballSize:" << -sin(balls[0].angle_x) * ballSize << "\n";
+	std::cout << "-cos(balls[0].angle_x)*ballSize:" << -cos(balls[0].angle_x) * ballSize << "\n\n\n";
 
 
 
@@ -149,11 +152,8 @@ void addball() {
 		if (balls.size() == 1) {//jest jedna kula
 			balls.push_back(myModel3D());
 			balls.back().initModel("modele/ball.obj", "modele/zielony.png", "modele/sky.png");
-
-			balls.back().setupModel(-sin(balls[0].angle_x)*ballSize, 0, -cos(balls[0].angle_x)*ballSize, 0,0,0, 1, 1, 1);
-			std::cout << "balls[0].angle_x"<<balls[0].angle_x << "\n";
-			std::cout << "-sin(balls[0].angle_x)*ballSize:" << -sin(balls[0].angle_x) * ballSize<<"\n";
-			std::cout << "-cos(balls[0].angle_x)*ballSize:" << -cos(balls[0].angle_x) * ballSize << "\n";
+			balls.back().setupModel(0, 0, -ballSize, 0,0,0, 1, 1, 1);
+			
 		}
 		else {
 
