@@ -51,7 +51,7 @@ glm::mat4 Vglobal = glm::lookAt(glm::vec3(0, 25, -22.5), glm::vec3(0, 0, 0), glm
 glm::mat4 Pglobal = glm::perspective(50.0f * PI / 180.0f, aspectRatio, 0.01f, 50.0f); //Wylicz macierz rzutowania
 glm::mat4 Mglobal = glm::mat4(1.0f);
 bool collisionWithApple = false;
-float ballSize = 5.0f;
+float ballSize = 2.0f;
 
 //modele============================================================
 myModel3D head;
@@ -137,10 +137,10 @@ void drawScene(GLFWwindow* window) {
 	for (int b = 1; b < balls.size(); b++) {
 		balls[b].drawModel(Vglobal, Pglobal, balls[b - 1].matrixM, 0, 0, 0, 0, 0, 0, 1, 1, 1);
 	}
-	std::cout << "coord_x:" << balls[0].coord_x << ", coord_z:" << balls[0].coord_z << "\n";
-	std::cout << "balls[0].angle_x: " << balls[0].angle_x << "\n";
-	std::cout << "-sin(balls[0].angle_x)*ballSize:" << -sin(balls[0].angle_x) * ballSize << "\n";
-	std::cout << "-cos(balls[0].angle_x)*ballSize:" << -cos(balls[0].angle_x) * ballSize << "\n\n\n";
+	//std::cout << "coord_x:" << balls[0].coord_x << ", coord_z:" << balls[0].coord_z << "\n";
+	//std::cout << "balls[0].angle_x: " << balls[0].angle_x << "\n";
+	//std::cout << "-sin(balls[0].angle_x)*ballSize:" << -sin(balls[0].angle_x) * ballSize << "\n";
+	//std::cout << "-cos(balls[0].angle_x)*ballSize:" << -cos(balls[0].angle_x) * ballSize << "\n\n\n";
 
 
 
@@ -149,15 +149,9 @@ void drawScene(GLFWwindow* window) {
 }
 void addball() {
 	if (collisionWithApple) {
-		if (balls.size() == 1) {//jest jedna kula
-			balls.push_back(myModel3D());
-			balls.back().initModel("modele/ball.obj", "modele/zielony.png", "modele/sky.png");
-			balls.back().setupModel(0, 0, -ballSize, 0,0,0, 1, 1, 1);
-			
-		}
-		else {
-
-		}
+		balls.push_back(myModel3D());
+		balls.back().initModel("modele/ball.obj", "modele/zielony.png", "modele/sky.png");
+		balls.back().setupModel(0, 0, -ballSize, 0, 0, 0, 1, 1, 1);
 		std::cout << "collisionWithApple" << std::endl;
 		collisionWithApple = false;
 	}
