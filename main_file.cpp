@@ -48,7 +48,7 @@ double frameTime=0;
 float speed_x = 0;
 float speed_y = 0;
 float speed_z = 0;
-glm::mat4 Vglobal = glm::lookAt(glm::vec3(0, 25, -22.5), glm::vec3(0, 0, 0), glm::vec3(0.0f, 1.0f, 0.0f)); //Wylicz macierz widoku
+glm::mat4 Vglobal = glm::lookAt(glm::vec3(0, 10, -32.5), glm::vec3(0, 0, 0), glm::vec3(0.0f, 1.0f, 0.0f)); //Wylicz macierz widoku
 glm::mat4 Pglobal = glm::perspective(50.0f * PI / 180.0f, aspectRatio, 0.01f, 50.0f); //Wylicz macierz rzutowania
 glm::mat4 Mglobal = glm::mat4(1.0f);
 bool collisionWithApple = false;
@@ -58,7 +58,7 @@ float distRandApple = 2.0f;
 bool existingApple = false;
 int weight = 800;
 int height = 800;
-
+int cnt = 0;
 //modele============================================================
 myModel3D head;
 myModel3D ball;
@@ -121,7 +121,7 @@ void initOpenGLProgram(GLFWwindow* window) {
 	//apple.setupModel(0, 0, 0, PI/2, 0, 0, 30.f, 30.f, 30.f);
 
 	apple.initModel("modele/apple3.obj", "modele/apple3.png", "modele/sky.png");
-	apple.setupModel(-5, 0, 0, PI / 2, 0, 0, 2.f, 2.f, 2.f);
+	apple.setupModel(-10, 0, -5, PI / 2, 0, 0, 2.f, 2.f, 2.f);
 
 }
 
@@ -138,7 +138,18 @@ void freeOpenGLProgram(GLFWwindow* window) {
 	delete sp;
 }
 
-
+bool bendSnake() {
+	float dist;
+	dist = sqrt((apple.world_coord_x - head.world_coord_x) * (apple.world_coord_x - head.world_coord_x) +
+		(apple.world_coord_y - head.world_coord_y) * (apple.world_coord_y - head.world_coord_y) +
+		(apple.world_coord_z - head.world_coord_z) * (apple.world_coord_z - head.world_coord_z));
+	//zderzy sie ze soba
+	if (dist < distCollisionApple) {
+		//std::cout << "\n bedzie jablko\n";
+		return true;
+	}
+	return false;
+}
 
 
 //Procedura rysujπca zawartoúÊ sceny
@@ -148,8 +159,13 @@ void drawScene(GLFWwindow* window) {
 //wlasciwa czesc ============================================================
 	
 	ball.drawModel(Vglobal, Pglobal, Mglobal, (sin(ball.angle_x))*speed_y,0, (cos(ball.angle_x))*speed_y, speed_x*frameTime, 0, 0, 1, 1, 1);
-	head.drawModel(Vglobal, Pglobal, ball.matrixM, 0,0,0,0, 0, 0, 1,1,1);
-	
+	if (bendSnake()&&cnt>10) {
+		head.angle_y = -PI / 4;
+	}
+	head.drawModel(Vglobal, Pglobal, ball.matrixM, 0, 0, 0, 0, 0, 0, 1, 1, 1);
+	if (bendSnake() && cnt > 10) {
+		head.angle_y = 0;
+	}
 	apple.drawModel(Vglobal, Pglobal, Mglobal, 0, 0, 0, speed_x * frameTime, 0, 0, 1, 1, 1);
 	
 	
@@ -258,6 +274,7 @@ void detectCollisionApple() {
 }
 
 
+
 int main(void)
 {
 	GLFWwindow* window; //Wskaünik na obiekt reprezentujπcy oknom
@@ -310,6 +327,7 @@ int main(void)
 		detectCollisionItself();
 		
 		Sleep(3000.f / 60.f);
+		cnt++;
 	}
 
 	freeOpenGLProgram(window);
