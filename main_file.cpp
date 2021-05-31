@@ -203,7 +203,7 @@ void detectCollisionItself() {
 
 void randApple() {
 	if (collisionWithApple == true) {
-		//zostalo zjedzone
+		//zostalo zjedzonee
 		int x=rand()%20-10, z=rand()%20-10;
 		float dist;
 		bool out = false;
