@@ -52,7 +52,7 @@ glm::mat4 Vglobal = glm::lookAt(glm::vec3(0, 25, -22.5), glm::vec3(0, 0, 0), glm
 glm::mat4 Pglobal = glm::perspective(50.0f * PI / 180.0f, aspectRatio, 0.01f, 50.0f); //Wylicz macierz rzutowania
 glm::mat4 Mglobal = glm::mat4(1.0f);
 bool collisionWithApple = false;
-float ballSize = 2.0f;
+float distCollisionHead = 3.0f;
 
 //modele============================================================
 myModel3D head;
@@ -106,7 +106,7 @@ void initOpenGLProgram(GLFWwindow* window) {
 	ball.setupModel(0, 0, PI, 0, 0, 0, 0.25f, 0.25f, 0.25f);
 
 	head.initModel("modele/minidragon.obj", "modele/minidragon.png", "modele/sky.png");
-	head.setupModel(0,2.f, 2.f, PI, 0, 0, 0.8f, 0.8f, 0.8f);
+	head.setupModel(0,5.f, 2.f, PI, 0, 0, 0.8f, 0.8f, 0.8f);
 	
 	tail.setupModel(0, 0, 0, 0, 0, 0, 1, 1, 1);
 	tail.initModel("modele/ball.obj", "modele/zielony.png", "modele/sky.png");
@@ -142,12 +142,15 @@ void drawScene(GLFWwindow* window) {
 	//zapisz miejsce ball
 	flexions.insert(flexions.begin(), std::vector<float>{ball.coord_x, ball.coord_y,ball.coord_z, ball.angle_x});
 	//std::cout << "coord_x:" << ball.coord_x << ", coord_z:" << ball.coord_z << "\n";
-	std::cout << tailCoords.size()<<"\n";
+	//std::cout <<"tail size:"<< tailCoords.size()<<"\n";
 	for (int t = 0; t < tailCoords.size(); t++) {
 		if (flexions.size() >= t) {
 			//std::cout <<"t: "<<t<<"; "<< flexions[t][0] << "," << flexions[t][1] << "," << flexions[t][2] << "," << flexions[t][3] << "\n";
 			tail.setupModel(flexions[t][0], flexions[t][1], flexions[t][2], flexions[t][3], 0, 0, 1.f, 1.f, 1.f);
 			tail.drawModel(Vglobal, Pglobal, Mglobal,0,0,0,0, 0, 0, 1, 1, 1);
+			//zapamietaj wspl segmentow
+			tailCoords[t] = std::vector<float>{tail.world_coord_x, tail.world_coord_y, tail.world_coord_z};
+			//std::cout << tailCoords[t][0]<<"\n";
 		}
 	}
 	
@@ -168,6 +171,20 @@ void addball() {
 	}
 	collisionWithApple = false;
 	
+}
+void detectCollisionItself() {
+	float dist;
+	for (int t = 3; t < tailCoords.size(); t++) {
+		dist = sqrt((tailCoords[t][0] - head.world_coord_x)* (tailCoords[t][0] - head.world_coord_x) + 
+			(tailCoords[t][1] - head.world_coord_y) * (tailCoords[t][1] - head.world_coord_y) +
+			(tailCoords[t][2] - head.world_coord_z) * (tailCoords[t][2] - head.world_coord_z));
+		//zderzy sie ze soba
+		if (dist < distCollisionHead) {
+			std::cout << "zderzenie";
+			Sleep(3000);
+			exit(0);
+		}
+	}
 }
 
 int main(void)
@@ -210,8 +227,10 @@ int main(void)
 		glfwPollEvents(); //Wykonaj procedury callback w zaleznoœci od zdarzeñ jakie zasz³y.
 		
 		//=======================================
-		//najpierw detect potem
+		//najpierw detect apple potem
 		addball();
+		//czy zderzy sie ze soba
+		detectCollisionItself();
 		Sleep(3000.f / 60.f);
 	}
 
