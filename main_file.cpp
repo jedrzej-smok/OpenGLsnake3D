@@ -38,6 +38,7 @@ Place, Fifth Floor, Boston, MA  02110 - 1301  USA
 #include <assimp/postprocess.h> //to co mozna zrobic z plikiem
 #include <myModel3D.h>
 #include <myModel3DfewMeshes.h>
+#include <Windows.h>
 
 
 ShaderProgram* sp;
@@ -55,8 +56,10 @@ float ballSize = 2.0f;
 
 //modele============================================================
 myModel3D head;
-std::vector<myModel3D> balls;//balls[0] to glowny element
-//myModel3DfewMeshes tmpModel;
+myModel3D ball;
+myModel3D tail;
+std::vector<std::vector<float>> tailCoords;
+std::vector<std::vector<float>> flexions;
 
 
 //Procedura obs³ugi b³êdów
@@ -68,8 +71,8 @@ void keyCallback(GLFWwindow* window,int key,int scancode,int action,int mods) {
     if (action==GLFW_PRESS) {
         if (key==GLFW_KEY_LEFT) speed_x=PI/2;
         if (key==GLFW_KEY_RIGHT) speed_x=-PI/2;
-        if (key==GLFW_KEY_UP) speed_y=PI/2;
-        if (key==GLFW_KEY_DOWN) speed_y=-PI/2;
+        if (key==GLFW_KEY_UP) speed_y=1.f;
+        if (key==GLFW_KEY_DOWN) speed_y=-1.f;
         if (key==GLFW_KEY_A) collisionWithApple=true;
     }
     if (action==GLFW_RELEASE) {
@@ -98,12 +101,16 @@ void initOpenGLProgram(GLFWwindow* window) {
 	//firstModel.initModel("anvil.obj", "metal.png","sky.png");
 	//firstModel.initModel("modele/ball.obj", "modele/zielony.png", "modele/sky.png");
 	//tmpModel.initModel("modele/dinoTest.obj", "modele/aroy.png", "modele/sky.png");
-	balls.push_back(myModel3D());
-	balls[0].initModel("modele/ball.obj", "modele/zielony.png", "modele/sky.png");
-	balls[0].setupModel(0, 0, PI, 0, 0, 0, 1, 1, 1);
+	
+	ball.initModel("modele/ball.obj", "modele/zielony.png", "modele/sky.png");
+	ball.setupModel(0, 0, PI, 0, 0, 0, 0.25f, 0.25f, 0.25f);
 
 	head.initModel("modele/minidragon.obj", "modele/minidragon.png", "modele/sky.png");
-	head.setupModel(0,1, 2.f, PI, 0, 0, 0.2f, 0.2f, 0.2f);
+	head.setupModel(0,2.f, 2.f, PI, 0, 0, 0.8f, 0.8f, 0.8f);
+	
+	tail.setupModel(0, 0, 0, 0, 0, 0, 1, 1, 1);
+	tail.initModel("modele/ball.obj", "modele/zielony.png", "modele/sky.png");
+
 }
 
 
@@ -111,11 +118,9 @@ void initOpenGLProgram(GLFWwindow* window) {
 void freeOpenGLProgram(GLFWwindow* window) {
     //************Tutaj umieszczaj kod, który nale¿y wykonaæ po zakoñczeniu pêtli g³ównej************
 	
-	for (int i = 0; i < 1; i++) {
-		balls[0].freeModel();
-	}
+	ball.freeModel();
 	head.freeModel();
-	
+	tail.freeModel();
 	//===========
 	delete sp;
 }
@@ -128,16 +133,24 @@ void drawScene(GLFWwindow* window) {
 	//************Tutaj umieszczaj kod rysuj¹cy obraz******************
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 //wlasciwa czesc ============================================================
-	//firstModel.drawModel(Vglobal, Pglobal, Mglobal, (sin(firstModel.angle_x))*speed_y*frameTime,0, (cos(firstModel.angle_x))*speed_y*frameTime, speed_x*frameTime, 0, 0,3,3, 3);
-	//tmpModel.drawModel3DfewMeshes(Vglobal, Pglobal, Mglobal, 0, 0, 0, speed_x * frameTime, speed_y * frameTime, 0, 0.2, 0.2, 0.2);
-
-
-	balls[0].drawModel(Vglobal, Pglobal, Mglobal, (sin(balls[0].angle_x))*speed_y*frameTime,0, (cos(balls[0].angle_x))*speed_y*frameTime, speed_x*frameTime, 0, 0, 1, 1, 1);
-	head.drawModel(Vglobal, Pglobal, balls[0].matrixM, 0,0,0,0, 0, 0, 1,1,1);
-	for (int b = 1; b < balls.size(); b++) {
-		balls[b].drawModel(Vglobal, Pglobal, balls[b - 1].matrixM, 0, 0, 0, 0, 0, 0, 1, 1, 1);
+	
+	ball.drawModel(Vglobal, Pglobal, Mglobal, (sin(ball.angle_x))*speed_y,0, (cos(ball.angle_x))*speed_y, speed_x*frameTime, 0, 0, 1, 1, 1);
+	head.drawModel(Vglobal, Pglobal, ball.matrixM, 0,0,0,0, 0, 0, 1,1,1);
+	
+	
+	
+	//zapisz miejsce ball
+	flexions.insert(flexions.begin(), std::vector<float>{ball.coord_x, ball.coord_y,ball.coord_z, ball.angle_x});
+	//std::cout << "coord_x:" << ball.coord_x << ", coord_z:" << ball.coord_z << "\n";
+	std::cout << tailCoords.size()<<"\n";
+	for (int t = 0; t < tailCoords.size(); t++) {
+		if (flexions.size() >= t) {
+			//std::cout <<"t: "<<t<<"; "<< flexions[t][0] << "," << flexions[t][1] << "," << flexions[t][2] << "," << flexions[t][3] << "\n";
+			tail.setupModel(flexions[t][0], flexions[t][1], flexions[t][2], flexions[t][3], 0, 0, 1.f, 1.f, 1.f);
+			tail.drawModel(Vglobal, Pglobal, Mglobal,0,0,0,0, 0, 0, 1, 1, 1);
+		}
 	}
-	//std::cout << "coord_x:" << balls[0].coord_x << ", coord_z:" << balls[0].coord_z << "\n";
+	
 	//std::cout << "balls[0].angle_x: " << balls[0].angle_x << "\n";
 	//std::cout << "-sin(balls[0].angle_x)*ballSize:" << -sin(balls[0].angle_x) * ballSize << "\n";
 	//std::cout << "-cos(balls[0].angle_x)*ballSize:" << -cos(balls[0].angle_x) * ballSize << "\n\n\n";
@@ -149,12 +162,12 @@ void drawScene(GLFWwindow* window) {
 }
 void addball() {
 	if (collisionWithApple) {
-		balls.push_back(myModel3D());
-		balls.back().initModel("modele/ball.obj", "modele/zielony.png", "modele/sky.png");
-		balls.back().setupModel(0, 0, -ballSize, 0, 0, 0, 1, 1, 1);
-		std::cout << "collisionWithApple" << std::endl;
-		collisionWithApple = false;
+		for (int o = 0; o < 1; o++) {
+			tailCoords.push_back(std::vector<float>{ 0, 0, 0 });
+		}
 	}
+	collisionWithApple = false;
+	
 }
 
 int main(void)
@@ -168,7 +181,7 @@ int main(void)
 		exit(EXIT_FAILURE);
 	}
 
-	window = glfwCreateWindow(500, 500, "OpenGL", NULL, NULL);  //Utwórz okno 500x500 o tytule "OpenGL" i kontekst OpenGL.
+	window = glfwCreateWindow(800, 800, "OpenGL", NULL, NULL);  //Utwórz okno 500x500 o tytule "OpenGL" i kontekst OpenGL.
 
 	if (!window) //Je¿eli okna nie uda³o siê utworzyæ, to zamknij program
 	{
@@ -199,6 +212,7 @@ int main(void)
 		//=======================================
 		//najpierw detect potem
 		addball();
+		Sleep(3000.f / 60.f);
 	}
 
 	freeOpenGLProgram(window);
