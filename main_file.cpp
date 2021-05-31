@@ -53,12 +53,13 @@ glm::mat4 Pglobal = glm::perspective(50.0f * PI / 180.0f, aspectRatio, 0.01f, 50
 glm::mat4 Mglobal = glm::mat4(1.0f);
 bool collisionWithApple = false;
 float distCollisionHead = 3.0f;
-float distCollisionApple = 3.0f;
-float distRandApple = 2.0f;
+float distCollisionApple = 2.0f;
+float distRandApple = 4.0f;
 bool existingApple = false;
 int weight = 800;
 int height = 800;
 int cnt = 0;
+float abc = 0.f;
 //modele============================================================
 myModel3D head;
 myModel3D ball;
@@ -151,6 +152,16 @@ bool bendSnake() {
 	return false;
 }
 
+void A(float* a) {
+
+	
+	if (cnt%40<20) {
+		*a += 0.05f;
+	}
+	else {
+		*a -= 0.05f;
+	}
+}
 
 //Procedura rysuj¹ca zawartoœæ sceny
 void drawScene(GLFWwindow* window) {
@@ -166,7 +177,8 @@ void drawScene(GLFWwindow* window) {
 	if (bendSnake() && cnt > 10) {
 		head.angle_y = 0;
 	}
-	apple.drawModel(Vglobal, Pglobal, Mglobal, 0, 0, 0, speed_x * frameTime, 0, 0, 1, 1, 1);
+	apple.coord_y = abc;
+	apple.drawModel(Vglobal, Pglobal, Mglobal, 0, 0, 0, PI/90, 0, 0, 1, 1, 1);
 	
 	
 	//zapisz miejsce ball
@@ -328,6 +340,7 @@ int main(void)
 		
 		Sleep(3000.f / 60.f);
 		cnt++;
+		A(&abc);
 	}
 
 	freeOpenGLProgram(window);
