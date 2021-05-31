@@ -150,10 +150,7 @@ void drawScene(GLFWwindow* window) {
 	ball.drawModel(Vglobal, Pglobal, Mglobal, (sin(ball.angle_x))*speed_y,0, (cos(ball.angle_x))*speed_y, speed_x*frameTime, 0, 0, 1, 1, 1);
 	head.drawModel(Vglobal, Pglobal, ball.matrixM, 0,0,0,0, 0, 0, 1,1,1);
 	
-	if (1/*existingApple*/) {
-		apple.drawModel(Vglobal, Pglobal, Mglobal, 0, 0, 0, speed_x * frameTime, 0, 0, 1, 1, 1);
-		std::cout << apple.world_coord_x << ", " << apple.world_coord_z << "\n";
-	}
+	apple.drawModel(Vglobal, Pglobal, Mglobal, 0, 0, 0, speed_x * frameTime, 0, 0, 1, 1, 1);
 	
 	
 	//zapisz miejsce ball
@@ -180,23 +177,25 @@ void drawScene(GLFWwindow* window) {
 void addball() {
 	if (collisionWithApple) {
 		for (int o = 0; o < 1; o++) {
-			tailCoords.push_back(std::vector<float>{ 0, 0, 0 });
+			tailCoords.push_back(std::vector<float>{ 1000000000, 1000000000, 1000000000 });
 		}
 	}
 	collisionWithApple = false;
 	
 }
 void detectCollisionItself() {
-	float dist;
-	for (int t = 3; t < tailCoords.size(); t++) {
-		dist = sqrt((tailCoords[t][0] - head.world_coord_x)* (tailCoords[t][0] - head.world_coord_x) + 
+	float d;
+	for (int t = 6; t < tailCoords.size(); t++) {
+		d = sqrt((tailCoords[t][0] - head.world_coord_x)* (tailCoords[t][0] - head.world_coord_x) + 
 			(tailCoords[t][1] - head.world_coord_y) * (tailCoords[t][1] - head.world_coord_y) +
 			(tailCoords[t][2] - head.world_coord_z) * (tailCoords[t][2] - head.world_coord_z));
 		//zderzy sie ze soba
-		if (dist < distCollisionHead) {
-			std::cout << "zderzenie ze soba";
+		if (d < distCollisionHead) {
+			std::cout << "zderzenie ze soba head:";
+			std::cout << head.world_coord_x << ", " << head.coord_z << ", blok: x:" << tailCoords[t][0] << ", " << tailCoords[t][2] << "\n";
+			std::cout << " odleglosc: " << d << ";\t";
 			std::cout << "\nt:" << t << std::endl;
-			Sleep(3000);
+			Sleep(1000);
 			exit(0);
 		}
 	}
@@ -205,8 +204,8 @@ void detectCollisionItself() {
 void randApple() {
 	if (collisionWithApple == true) {
 		//zostalo zjedzone
-		int x, z;
-		float dist;
+		int x=-5, z=0;
+		/*float dist;
 		bool out = false;
 		do {
 			out = false;
@@ -235,7 +234,10 @@ void randApple() {
 				}
 			}
 		} while (dist < distRandApple || out);//zeby nie bylo na wezu
-
+		*/
+		x += 5;
+		if (x > 15)
+			x = -10;
 		apple.setupModel((float)x, 0, (float)z, 0, 0, 0, 2.f, 2.f, 2.f);
 
 
@@ -302,7 +304,7 @@ int main(void)
 		//najpierw detect apple potem
 		
 		
-		detectCollisionApple();
+		//detectCollisionApple();
 		addball();
 		
 		//czy zderzy sie ze soba
