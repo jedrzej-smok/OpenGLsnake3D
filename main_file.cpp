@@ -204,8 +204,8 @@ void detectCollisionItself() {
 void randApple() {
 	if (collisionWithApple == true) {
 		//zostalo zjedzone
-		int x=-5, z=0;
-		/*float dist;
+		int x=rand()%20-10, z=rand()%20-10;
+		float dist;
 		bool out = false;
 		do {
 			out = false;
@@ -234,10 +234,8 @@ void randApple() {
 				}
 			}
 		} while (dist < distRandApple || out);//zeby nie bylo na wezu
-		*/
-		x += 5;
-		if (x > 15)
-			x = -10;
+		
+		
 		apple.setupModel((float)x, 0, (float)z, 0, 0, 0, 2.f, 2.f, 2.f);
 
 
@@ -304,7 +302,7 @@ int main(void)
 		//najpierw detect apple potem
 		
 		
-		//detectCollisionApple();
+		detectCollisionApple();
 		addball();
 		
 		//czy zderzy sie ze soba
