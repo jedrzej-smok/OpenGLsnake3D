@@ -48,8 +48,8 @@ double frameTime=0;
 float speed_x = 0;
 float speed_y = 0;
 float speed_z = 0;
-glm::mat4 Vglobal = glm::lookAt(glm::vec3(0, 10, -32.5), glm::vec3(0, 0, 0), glm::vec3(0.0f, 1.0f, 0.0f)); //Wylicz macierz widoku
-glm::mat4 Pglobal = glm::perspective(50.0f * PI / 180.0f, aspectRatio, 0.01f, 50.0f); //Wylicz macierz rzutowania
+glm::mat4 Vglobal = glm::lookAt(glm::vec3(0, 30, -32.5), glm::vec3(0, 0, 0), glm::vec3(0.0f, 1.0f, 1.0f)); //Wylicz macierz widoku
+glm::mat4 Pglobal = glm::perspective(50.0f * PI / 180.0f, aspectRatio, 0.01f, 200.0f); //Wylicz macierz rzutowania
 glm::mat4 Mglobal = glm::mat4(1.0f);
 bool collisionWithApple = false;
 float distCollisionHead = 3.0f;
@@ -65,6 +65,8 @@ myModel3D head;
 myModel3D ball;
 myModel3D tail;
 myModel3D apple;
+myModel3D ground;
+
 std::vector<std::vector<float>> tailCoords;
 std::vector<std::vector<float>> flexions;
 
@@ -118,11 +120,11 @@ void initOpenGLProgram(GLFWwindow* window) {
 	tail.setupModel(0, 0, 0, 0, 0, 0, 1, 1, 1);
 	tail.initModel("modele/ball.obj", "modele/zielony.png", "modele/sky.png");
 
-	//apple.initModel("modele/apple2.obj", "modele/apple2.png", "modele/sky.png");
-	//apple.setupModel(0, 0, 0, PI/2, 0, 0, 30.f, 30.f, 30.f);
-
 	apple.initModel("modele/apple3.obj", "modele/apple3.png", "modele/sky.png");
-	apple.setupModel(-10, 0, -5, PI / 2, 0, 0, 2.f, 2.f, 2.f);
+	apple.setupModel(-10, 0, 20, PI / 2, 0, 0, 2.f, 2.f, 2.f);
+
+	ground.initModel("modele/sand/sand.obj", "modele/sand/Sand_color.png", "modele/sky.png");
+	ground.setupModel(10, 10, 0, 0, 0, 0, 1.f, 1.f, 1.f);
 
 }
 
@@ -135,6 +137,7 @@ void freeOpenGLProgram(GLFWwindow* window) {
 	head.freeModel();
 	tail.freeModel();
 	apple.freeModel();
+	ground.freeModel();
 	//===========
 	delete sp;
 }
@@ -180,6 +183,8 @@ void drawScene(GLFWwindow* window) {
 	apple.coord_y = abc;
 	apple.drawModel(Vglobal, Pglobal, Mglobal, 0, 0, 0, PI/90, 0, 0, 1, 1, 1);
 	
+	ground.drawModel(Vglobal, Pglobal, Mglobal, 0, 0, 0, 0, 0, 0, 1, 1, 1);
+	
 	
 	//zapisz miejsce ball
 	flexions.insert(flexions.begin(), std::vector<float>{ball.coord_x, ball.coord_y,ball.coord_z, ball.angle_x});
@@ -197,7 +202,9 @@ void drawScene(GLFWwindow* window) {
 		}
 	}
 	
-	
+	ball.setLightposition(5, 0, -10);
+	head.setLightposition(5, 0, -10);
+	tail.setLightposition(5, 0, -10);
 	
 //reszta=====================================================================
     glfwSwapBuffers(window); //Przerzuæ tylny bufor na przedni
@@ -238,7 +245,7 @@ void randApple() {
 		do {
 			out = false;
 			x = rand() % 20 - 10;
-			z = rand() % 10 - 5;
+			z = rand() % 200;
 
 			dist = sqrt((head.world_coord_x - x) * (head.world_coord_x - x) +
 				(head.world_coord_z - z) * (head.world_coord_z - z));
@@ -338,6 +345,7 @@ int main(void)
 		
 		detectCollisionItself();
 		
+
 		Sleep(3000.f / 60.f);
 		cnt++;
 		A(&abc);
