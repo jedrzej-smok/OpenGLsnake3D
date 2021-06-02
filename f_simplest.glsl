@@ -28,7 +28,7 @@ void main(void) {
 	vec4 metal = texture(textureMap0,iTexCoord0); //Pobranie koloru
 	vec4 sky = texture(textureMap1,iTexCoord1); //Pobranie koloru z drugiej jedenostki teksturujacej
 	vec4 kd = mix(metal, sky, 0.3);
-	vec4 ks = vec4(0.5,0.5,0.5,0.5);
+	vec4 ks = vec4(1.0, 0.3f, 0.0f,0.2f);//czerwone
 	
 	//Obliczenie modelu oświetlenia
 	float nl = clamp(dot(mn, ml), 0, 1);
@@ -44,7 +44,7 @@ void main(void) {
 	vec4 mr2 = reflect(-ml2, mn2);
 
 	//Parametry powierzchni
-	
+	vec4 ks2 = vec4(1.0,0.85f,0.f,0.75f);//zolte
 	
 	//Obliczenie modelu oświetlenia
 	float nl2 = clamp(dot(mn2, ml2), 0, 1);
@@ -53,7 +53,7 @@ void main(void) {
 
 	
 	
-	pixelColor= vec4(kd.rgb * nl, kd.a) + vec4(ks.rgb*rv, 0)+ vec4(kd.rgb * nl2, kd.a) + vec4(ks.rgb*rv2, 0);//  1 i 2 wlaczone swiatlo
+	pixelColor= vec4(kd.rgb * nl, kd.a) + vec4(ks.rgb*rv, 0)+ vec4(kd.rgb * nl2, kd.a) + vec4(ks2.rgb*rv2, 0);//  1 i 2 wlaczone swiatlo
 	
 	//pixelColor= vec4(kd.rgb * nl2, kd.a) + vec4(ks.rgb*rv2, 0);//tylko drugie swiatlo
 	

@@ -48,7 +48,7 @@ double frameTime=0;
 float speed_x = 0;
 float speed_y = 0;
 float speed_z = 0;
-glm::mat4 Vglobal = glm::lookAt(glm::vec3(0, 30, -32.5), glm::vec3(0, 0, 0), glm::vec3(0.0f, 1.0f, 1.0f)); //Wylicz macierz widoku
+glm::mat4 Vglobal = glm::lookAt(glm::vec3(0, 30, -32.5), glm::vec3(0, 0, 0), glm::vec3(0.0f, 1.0f, 0.5f)); //Wylicz macierz widoku
 glm::mat4 Pglobal = glm::perspective(50.0f * PI / 180.0f, aspectRatio, 0.01f, 200.0f); //Wylicz macierz rzutowania
 glm::mat4 Mglobal = glm::mat4(1.0f);
 bool collisionWithApple = false;
@@ -124,7 +124,7 @@ void initOpenGLProgram(GLFWwindow* window) {
 	apple.setupModel(-10, 0, 20, PI / 2, 0, 0, 2.f, 2.f, 2.f);
 
 	ground.initModel("modele/sand/sand.obj", "modele/sand/Sand_color.png", "modele/sky.png");
-	ground.setupModel(10, 10, 0, 0, 0, 0, 1.f, 1.f, 1.f);
+	ground.setupModel(0, -3.2f, 0, 0, 0, 0, 50.f, 1.f, 50.f);
 
 }
 
@@ -205,6 +205,7 @@ void drawScene(GLFWwindow* window) {
 	ball.setLightposition(5, 0, -10);
 	head.setLightposition(5, 0, -10);
 	tail.setLightposition(5, 0, -10);
+	ground.setLightposition(5, 0, -10);
 	
 //reszta=====================================================================
     glfwSwapBuffers(window); //Przerzuæ tylny bufor na przedni
