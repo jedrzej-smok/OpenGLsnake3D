@@ -52,8 +52,8 @@ glm::mat4 Vglobal = glm::lookAt(glm::vec3(0, 30, -32.5), glm::vec3(0, 0, 0), glm
 glm::mat4 Pglobal = glm::perspective(50.0f * PI / 180.0f, aspectRatio, 0.01f, 200.0f); //Wylicz macierz rzutowania
 glm::mat4 Mglobal = glm::mat4(1.0f);
 bool collisionWithApple = false;
-float distCollisionHead = 3.0f;
-float distCollisionApple = 2.0f;
+float distCollisionHead = 5.0f;
+float distCollisionApple = 5.0f;
 float distRandApple = 4.0f;
 bool existingApple = false;
 int weight = 800;
@@ -167,15 +167,13 @@ void initOpenGLProgram(GLFWwindow* window) {
 	glfwSetKeyCallback(window,keyCallback);
 	sp = new ShaderProgram("v_simplest.glsl", NULL, "f_simplest.glsl");
 	sp->use();
-	//firstModel.initModel("anvil.obj", "metal.png","sky.png");
-	//firstModel.initModel("modele/ball.obj", "modele/zielony.png", "modele/sky.png");
-	//tmpModel.initModel("modele/dinoTest.obj", "modele/aroy.png", "modele/sky.png");
+	
 	
 	ball.initModel("modele/ball.obj", "modele/zielony.png", "modele/sky.png");
-	ball.setupModel(0, 0, PI, 0, 0, 0, 0.25f, 0.25f, 0.25f);
+	ball.setupModel(0, 0, PI, 0, 0, 0, 1.f, 1.f, 1.f);
 
-	head.initModel("modele/minidragon.obj", "modele/minidragon.png", "modele/sky.png");
-	head.setupModel(0,5.f, 2.f, PI, 0, 0, 0.8f, 0.8f, 0.8f);
+	head.initModel("modele/duck/duck.obj", "modele/duck/duck.png", "modele/sky.png");
+	head.setupModel(0,-13.5f, 9.f, 0, -PI/6, 0, 0.2f, 0.2f, 0.2f);
 	
 	tail.setupModel(0, 0, 0, 0, 0, 0, 1, 1, 1);
 	tail.initModel("modele/ball.obj", "modele/zielony.png", "modele/sky.png");
@@ -183,8 +181,8 @@ void initOpenGLProgram(GLFWwindow* window) {
 	apple.initModel("modele/apple3.obj", "modele/apple3.png", "modele/sky.png");
 	apple.setupModel(-10, 0, 20, PI / 2, 0, 0, 2.f, 2.f, 2.f);
 
-	ground.initModel("modele/sand/sand.obj", "modele/sand/Sand_color.png", "modele/sand/Sand_rough.png");
-	ground.setupModel(0, -3.7f, 0, 0, 0, 0, 50.f, 1.f, 50.f);
+	ground.initModel("modele/terreno02/terreno02.obj", "modele/terreno02/terreno02.png", "modele/terreno02/occlusion.png");
+	ground.setupModel(0, -1.f, 0, 0, 0, 0, 1.f, 1.f, 1.f);
 
 }
 
@@ -244,13 +242,10 @@ void drawScene(GLFWwindow* window) {
 
 
 	ball.drawModel(Vglobal, Pglobal, Mglobal, (sin(ball.angle_x))*speed_y,0, (cos(ball.angle_x))*speed_y, speed_x*frameTime, 0, 0, 1, 1, 1);
-	if (bendSnake()&&cnt>10) {
-		head.angle_y = -PI / 4;
-	}
+	//if (bendSnake()&&cnt>10) {head.angle_y = -PI / 4;}
 	head.drawModel(Vglobal, Pglobal, ball.matrixM, 0, 0, 0, 0, 0, 0, 1, 1, 1);
-	if (bendSnake() && cnt > 10) {
-		head.angle_y = 0;
-	}
+	//if (bendSnake() && cnt > 10) {head.angle_y = 0;}
+
 	apple.coord_y = abc;
 	apple.drawModel(Vglobal, Pglobal, Mglobal, 0, 0, 0, PI/90, 0, 0, 1, 1, 1);
 	
@@ -290,9 +285,9 @@ void addball() {
 void detectCollisionItself() {
 	float d;
 	for (int t = 6; t < tailCoords.size(); t++) {
-		d = sqrt((tailCoords[t][0] - head.world_coord_x)* (tailCoords[t][0] - head.world_coord_x) + 
-			(tailCoords[t][1] - head.world_coord_y) * (tailCoords[t][1] - head.world_coord_y) +
-			(tailCoords[t][2] - head.world_coord_z) * (tailCoords[t][2] - head.world_coord_z));
+		d = sqrt((tailCoords[t][0] - ball.world_coord_x)* (tailCoords[t][0] - ball.world_coord_x) +
+			(tailCoords[t][1] - ball.world_coord_y) * (tailCoords[t][1] - ball.world_coord_y) +
+			(tailCoords[t][2] - ball.world_coord_z) * (tailCoords[t][2] - ball.world_coord_z));
 		//zderzy sie ze soba
 		if (d < distCollisionHead) {
 			std::cout << "zderzenie ze soba head:";
@@ -348,9 +343,9 @@ void randApple() {
 
 void detectCollisionApple() {
 	float dist;
-	dist = sqrt((apple.world_coord_x - head.world_coord_x) * (apple.world_coord_x - head.world_coord_x) +
-			(apple.world_coord_y - head.world_coord_y) * (apple.world_coord_y - head.world_coord_y) +
-			(apple.world_coord_z - head.world_coord_z) * (apple.world_coord_z - head.world_coord_z));
+	dist = sqrt((apple.world_coord_x - ball.world_coord_x) * (apple.world_coord_x - ball.world_coord_x) +
+			(apple.world_coord_y - ball.world_coord_y) * (apple.world_coord_y - ball.world_coord_y) +
+			(apple.world_coord_z - ball.world_coord_z) * (apple.world_coord_z - ball.world_coord_z));
 		//zderzy sie ze soba
 		if (dist < distCollisionApple) {
 			std::cout << "\n najechane jablko\n";
