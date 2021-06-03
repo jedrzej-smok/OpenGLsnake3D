@@ -80,6 +80,8 @@ float cameraAngleY = 0.f;
 float cameraSpeedHeight = 0.f;
 float cameraHeight = 2.0f;
 
+glm::vec3 toRed(-20,18,11);
+glm::vec3 toYellow(20,18,11);
 
 std::vector<std::vector<float>> tailCoords;
 std::vector<std::vector<float>> flexions;
@@ -229,7 +231,18 @@ void drawScene(GLFWwindow* window) {
 	//************Tutaj umieszczaj kod rysuj¹cy obraz******************
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 //wlasciwa czesc ============================================================
-	
+	ball.setLightRed(posCamera + toRed);
+	head.setLightRed(posCamera + toRed);
+	tail.setLightRed(posCamera + toRed);
+	ground.setLightRed(posCamera + toRed);
+
+	ball.setLightYellow(posCamera + toYellow);
+	head.setLightYellow(posCamera + toYellow);
+	tail.setLightYellow(posCamera + toYellow);
+	ground.setLightYellow(posCamera + toYellow);
+
+
+
 	ball.drawModel(Vglobal, Pglobal, Mglobal, (sin(ball.angle_x))*speed_y,0, (cos(ball.angle_x))*speed_y, speed_x*frameTime, 0, 0, 1, 1, 1);
 	if (bendSnake()&&cnt>10) {
 		head.angle_y = -PI / 4;
@@ -260,10 +273,7 @@ void drawScene(GLFWwindow* window) {
 		}
 	}
 	
-	ball.setLightposition(5,0,-10);
-	head.setLightposition(5, 0, -10);
-	tail.setLightposition(5, 0, -10);
-	ground.setLightposition(5, 0, -10);
+	
 	
 //reszta=====================================================================
     glfwSwapBuffers(window); //Przerzuæ tylny bufor na przedni

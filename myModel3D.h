@@ -32,6 +32,7 @@ class myModel3D
 		int numberOfIndex;
 		int numberOfMeshes;
 		int numberOfTexs;
+		glm::vec4 lightposition1;
 		glm::vec4 lightposition2;
 		void loadModelAssimp(std::string path);
 
@@ -73,7 +74,8 @@ class myModel3D
 		void setupModel(float moveX = 0.f, float moveY = 0.f, float moveZ = 0.f,
 			float rotationX = 0.f, float rotationY = 0.f, float rotationZ = 0.f,
 			float rescaleX = 1.0f, float rescaleY = 1.0f, float rescaleZ = 1.0f );
-		void setLightposition(int x, int y, int z);
+		void setLightYellow(glm::vec3 yellow);
+		void setLightRed(glm::vec3 red);
 
 		void drawModel(glm::mat4 V, glm::mat4 P, glm::mat4 M, float moveX=0.f, float moveY = 0.f, float moveZ = 0.f,
 			float rotationX=0.f, float rotationY=0.f, float rotationZ = 0.f,

@@ -48,14 +48,16 @@ void main(void) {
 	
 	//Obliczenie modelu oświetlenia
 	float nl2 = clamp(dot(mn2, ml2), 0, 1);
-	float rv2 = pow(clamp(dot(mr2, mv2), 0, 1), 10);
+	float rv2 = pow(clamp(dot(mr2, mv2), 0, 1), 50);
 
 
 	
 	
 	pixelColor= vec4(kd.rgb * nl, kd.a) + vec4(ks.rgb*rv, 0)+ vec4(kd.rgb * nl2, kd.a) + vec4(ks2.rgb*rv2, 0);//  1 i 2 wlaczone swiatlo
 	
-	//pixelColor= vec4(kd.rgb * nl2, kd.a) + vec4(ks.rgb*rv2, 0);//tylko drugie swiatlo
+	//pixelColor= vec4(kd.rgb * nl, kd.a) + vec4(ks.rgb*rv, 0);//tylko pierwsze swiatlo czerwone
+	
+	//pixelColor= vec4(kd.rgb * nl2, kd.a) + vec4(ks2.rgb*rv2, 0);//tylko drugie swiatlo zolte
 	
 	//pixelColor = metal;
 }

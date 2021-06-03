@@ -156,8 +156,11 @@ void myModel3D::freeModel() {
 	glDeleteBuffers(1, &bufIndex);
 	delete sp;
 }
-void myModel3D::setLightposition(int x, int y, int z) {
-	lightposition2 = glm::vec4(x, y, z, 1);
+void myModel3D::setLightRed(glm::vec3 red) {
+	lightposition1 = glm::vec4(red.x, red.y, red.z, 1);
+}
+void myModel3D::setLightYellow(glm::vec3 yellow) {
+	lightposition2 = glm::vec4(yellow.x, yellow.y, yellow.z, 1);
 }
 void myModel3D:: drawModel(glm::mat4 V, glm::mat4 P, glm::mat4 M, float moveX, float moveY, float moveZ,
 	float rotationX, float rotationY, float rotationZ,
@@ -197,7 +200,11 @@ void myModel3D:: drawModel(glm::mat4 V, glm::mat4 P, glm::mat4 M, float moveX, f
 	glUniformMatrix4fv(sp->u("P"), 1, false, glm::value_ptr(P));
 	glUniformMatrix4fv(sp->u("V"), 1, false, glm::value_ptr(V));
 	glUniformMatrix4fv(sp->u("M"), 1, false, glm::value_ptr(matrixM));
-	glUniformMatrix4fv(sp->u("lp2"), 1, false, glm::value_ptr(lightposition2));
+
+	//red
+	glUniform4f(sp->u("lp1"), lightposition1.x, lightposition1.y, lightposition1.z, lightposition1.w );
+	//yellow
+	glUniform4f(sp->u("lp2"), lightposition2.x, lightposition2.y, lightposition2.z, lightposition2.w);
 
 	glEnableVertexAttribArray(sp->a("vertex"));  //W³¹cz przesy³anie danych do atrybutu vertex
 	glBindBuffer(GL_ARRAY_BUFFER, bufVertex);//chyba ten bufor aktywny
