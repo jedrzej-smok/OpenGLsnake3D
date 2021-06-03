@@ -60,12 +60,26 @@ int weight = 800;
 int height = 800;
 int cnt = 0;
 float abc = 0.f;
+glm::vec3 posCamera = glm::vec3(0, 2, -31);
+
 //modele============================================================
 myModel3D head;
 myModel3D ball;
 myModel3D tail;
 myModel3D apple;
 myModel3D ground;
+
+float cameraSpeedX = 0.f;
+float cameraSpeedY = 0.f;
+
+float cameraWalkSpeed = 0.f;
+float cameraAngleX = 0.f;
+float cameraAngleY = 0.f;
+
+//wyskosc kamery
+float cameraSpeedHeight = 0.f;
+float cameraHeight = 2.0f;
+
 
 std::vector<std::vector<float>> tailCoords;
 std::vector<std::vector<float>> flexions;
@@ -82,16 +96,60 @@ void keyCallback(GLFWwindow* window,int key,int scancode,int action,int mods) {
         if (key==GLFW_KEY_RIGHT) speed_x=-PI/2;
         if (key==GLFW_KEY_UP) speed_y=1.f;
         if (key==GLFW_KEY_DOWN) speed_y=-1.f;
-        if (key==GLFW_KEY_A) collisionWithApple=true;
+        if (key==GLFW_KEY_Q) collisionWithApple=true;
+		
+		//kamera
+		 
+		//obrot lewo prawo
+		if (key == GLFW_KEY_A) cameraSpeedY = 0.5f;
+		if (key == GLFW_KEY_D) cameraSpeedY = -0.5f;
+		//przesuwanie kamery w plaszczyznie xz
+		if (key == GLFW_KEY_W) cameraWalkSpeed = 50.f;
+		if (key == GLFW_KEY_S) cameraWalkSpeed = -50.f;
+		//obrot kamery gora dol
+		if (key == GLFW_KEY_PAGE_DOWN) cameraSpeedX = 0.5f;
+		if (key == GLFW_KEY_PAGE_UP) cameraSpeedX = -0.5f;
+		//wysokosc kamery
+		if (key == GLFW_KEY_Z) cameraSpeedHeight = 5.f;
+		if (key == GLFW_KEY_X) cameraSpeedHeight = -5.f;
     }
     if (action==GLFW_RELEASE) {
         if (key==GLFW_KEY_LEFT) speed_x=0;
         if (key==GLFW_KEY_RIGHT) speed_x=0;
         if (key==GLFW_KEY_UP) speed_y=0;
         if (key==GLFW_KEY_DOWN) speed_y=0;
-    }
+
+		//kamera
+		if (key == GLFW_KEY_A) cameraSpeedY = 0;
+		if (key == GLFW_KEY_D) cameraSpeedY = 0;
+
+		if (key == GLFW_KEY_W) cameraWalkSpeed = 0;
+		if (key == GLFW_KEY_S) cameraWalkSpeed = 0;
+
+		if (key == GLFW_KEY_PAGE_DOWN) cameraSpeedX = 0;
+		if (key == GLFW_KEY_PAGE_UP) cameraSpeedX = 0;
+
+		if (key == GLFW_KEY_Z) cameraSpeedHeight = 0;
+		if (key == GLFW_KEY_X) cameraSpeedHeight = 0;
+	}
 }
 
+glm::vec3 calcDir(float kat_x, float kat_y) {
+	glm::vec4 dir = glm::vec4(0, 0, 1, 0);
+	glm::mat4 M = glm::rotate(glm::mat4(1.0f), kat_y, glm::vec3(0, 1, 0));
+	M = glm::rotate(M, kat_x, glm::vec3(1, 0, 0));
+	dir = M * dir;
+	return glm::vec3(dir);
+}
+
+void moveCamera(float time) {
+	cameraAngleX += cameraSpeedX * time;
+	cameraAngleY += cameraSpeedY * time;
+	cameraHeight += cameraSpeedHeight * time;
+	posCamera += cameraWalkSpeed * time * calcDir(cameraSpeedX, cameraAngleY);
+	posCamera.y = cameraHeight;
+	Vglobal = glm::lookAt(posCamera, posCamera+calcDir(cameraAngleX, cameraAngleY), glm::vec3(0.0f, 1.0f, 0.0f)); //Wylicz macierz widoku
+}
 void windowResizeCallback(GLFWwindow* window,int width,int height) {
     if (height==0) return;
     aspectRatio=(float)width/(float)height;
@@ -123,8 +181,8 @@ void initOpenGLProgram(GLFWwindow* window) {
 	apple.initModel("modele/apple3.obj", "modele/apple3.png", "modele/sky.png");
 	apple.setupModel(-10, 0, 20, PI / 2, 0, 0, 2.f, 2.f, 2.f);
 
-	ground.initModel("modele/sand/sand.obj", "modele/sand/Sand_color.png", "modele/sky.png");
-	ground.setupModel(0, -3.2f, 0, 0, 0, 0, 50.f, 1.f, 50.f);
+	ground.initModel("modele/sand/sand.obj", "modele/sand/Sand_color.png", "modele/sand/Sand_rough.png");
+	ground.setupModel(0, -3.7f, 0, 0, 0, 0, 50.f, 1.f, 50.f);
 
 }
 
@@ -202,7 +260,7 @@ void drawScene(GLFWwindow* window) {
 		}
 	}
 	
-	ball.setLightposition(5, 0, -10);
+	ball.setLightposition(5,0,-10);
 	head.setLightposition(5, 0, -10);
 	tail.setLightposition(5, 0, -10);
 	ground.setLightposition(5, 0, -10);
@@ -331,6 +389,7 @@ int main(void)
 	{
 		frameTime = glfwGetTime();
 		glfwSetTime(0); //Zeruj timer
+		moveCamera((float)frameTime);
 		drawScene(window); //Wykonaj procedurê rysuj¹c¹
 		glfwPollEvents(); //Wykonaj procedury callback w zaleznoœci od zdarzeñ jakie zasz³y.
 		
