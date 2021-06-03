@@ -169,14 +169,14 @@ void initOpenGLProgram(GLFWwindow* window) {
 	sp->use();
 	
 	
-	ball.initModel("modele/ball.obj", "modele/zielony.png", "modele/sky.png");
+	ball.initModel("modele/ball.obj", "modele/duck/skin.png", "modele/sky.png");
 	ball.setupModel(0, 0, PI, 0, 0, 0, 1.f, 1.f, 1.f);
 
 	head.initModel("modele/duck/duck.obj", "modele/duck/duck.png", "modele/sky.png");
 	head.setupModel(0,-13.5f, 9.f, 0, -PI/6, 0, 0.2f, 0.2f, 0.2f);
 	
 	tail.setupModel(0, 0, 0, 0, 0, 0, 1, 1, 1);
-	tail.initModel("modele/ball.obj", "modele/zielony.png", "modele/sky.png");
+	tail.initModel("modele/ball.obj", "modele/duck/skin.png", "modele/sky.png");
 
 	apple.initModel("modele/apple3.obj", "modele/apple3.png", "modele/sky.png");
 	apple.setupModel(-10, 0, 20, PI / 2, 0, 0, 2.f, 2.f, 2.f);
