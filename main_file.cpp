@@ -54,6 +54,7 @@ glm::mat4 Mglobal = glm::mat4(1.0f);
 bool collisionWithApple = false;
 float distCollisionHead = 5.0f;
 float distCollisionApple = 5.0f;
+float distCollisionTree = 5.0f;
 float distRandApple = 4.0f;
 bool existingApple = false;
 int weight = 800;
@@ -68,6 +69,9 @@ myModel3D ball;
 myModel3D tail;
 myModel3D apple;
 myModel3D ground;
+myModel3D tree1;
+myModel3D tree2;
+myModel3D tree3;
 
 float cameraSpeedX = 0.f;
 float cameraSpeedY = 0.f;
@@ -78,7 +82,7 @@ float cameraAngleY = 0.f;
 
 //wyskosc kamery
 float cameraSpeedHeight = 0.f;
-float cameraHeight = 2.0f;
+float cameraHeight = 5.0f;
 
 glm::vec3 toRed(-20,18,11);
 glm::vec3 toYellow(20,18,11);
@@ -97,7 +101,7 @@ void keyCallback(GLFWwindow* window,int key,int scancode,int action,int mods) {
         if (key==GLFW_KEY_LEFT) speed_x=PI/2;
         if (key==GLFW_KEY_RIGHT) speed_x=-PI/2;
         if (key==GLFW_KEY_UP) speed_y=1.f;
-        if (key==GLFW_KEY_DOWN) speed_y=-1.f;
+        //if (key==GLFW_KEY_DOWN) speed_y=-1.f;
         if (key==GLFW_KEY_Q) collisionWithApple=true;
 		
 		//kamera
@@ -118,8 +122,8 @@ void keyCallback(GLFWwindow* window,int key,int scancode,int action,int mods) {
     if (action==GLFW_RELEASE) {
         if (key==GLFW_KEY_LEFT) speed_x=0;
         if (key==GLFW_KEY_RIGHT) speed_x=0;
-        if (key==GLFW_KEY_UP) speed_y=0;
-        if (key==GLFW_KEY_DOWN) speed_y=0;
+        //if (key==GLFW_KEY_UP) speed_y=0;
+        //if (key==GLFW_KEY_DOWN) speed_y=0;
 
 		//kamera
 		if (key == GLFW_KEY_A) cameraSpeedY = 0;
@@ -181,9 +185,14 @@ void initOpenGLProgram(GLFWwindow* window) {
 	apple.initModel("modele/apple3.obj", "modele/apple3.png", "modele/sky.png");
 	apple.setupModel(-10, 0, 20, PI / 2, 0, 0, 2.f, 2.f, 2.f);
 
-	ground.initModel("modele/terreno02/terreno02.obj", "modele/terreno02/terreno02.png", "modele/terreno02/occlusion.png");
-	ground.setupModel(0, -1.f, 0, 0, 0, 0, 1.f, 1.f, 1.f);
-
+	ground.initModel("modele/Rectangle.obj", "modele/Sand_color.png", "sky.png");
+	ground.setupModel(50, -6.f, 100, PI, 0, 0, 100.f, 1.f, 100.f);
+	tree1.initModel("modele/tree/TreeLeaf.obj", "modele/tree/leaftree.png", "modele/sky.png");
+	tree1.setupModel(30, -1, 27, 0, 0, 0, 45, 45, 45);
+	tree2.initModel("modele/tree/TreeLeaf.obj", "modele/tree/leaftree.png", "modele/sky.png");
+	tree2.setupModel(-10, -1, 80, 0, 0, 0, 45, 45, 45);
+	tree3.initModel("modele/tree/TreeLeaf.obj", "modele/tree/leaftree.png", "modele/sky.png");
+	tree3.setupModel(-50, -1, -45, 0, 0, 0, 45, 45, 45);
 }
 
 
@@ -196,6 +205,9 @@ void freeOpenGLProgram(GLFWwindow* window) {
 	tail.freeModel();
 	apple.freeModel();
 	ground.freeModel();
+	tree1.freeModel();
+	tree2.freeModel();
+	tree3.freeModel();
 	//===========
 	delete sp;
 }
@@ -250,7 +262,9 @@ void drawScene(GLFWwindow* window) {
 	apple.drawModel(Vglobal, Pglobal, Mglobal, 0, 0, 0, PI/90, 0, 0, 1, 1, 1);
 	
 	ground.drawModel(Vglobal, Pglobal, Mglobal, 0, 0, 0, 0, 0, 0, 1, 1, 1);
-	
+	tree1.drawModel(Vglobal,Pglobal, Mglobal,0,0,0,0,0,0, 1,1,1);
+	tree2.drawModel(Vglobal,Pglobal, Mglobal,0,0,0,0,0,0, 1,1,1);
+	tree3.drawModel(Vglobal,Pglobal, Mglobal,0,0,0,0,0,0, 1,1,1);
 	
 	//zapisz miejsce ball
 	flexions.insert(flexions.begin(), std::vector<float>{ball.coord_x, ball.coord_y,ball.coord_z, ball.angle_x});
@@ -267,8 +281,7 @@ void drawScene(GLFWwindow* window) {
 			//std::cout << tailCoords[t][0]<<"\n";
 		}
 	}
-	
-	
+//plaszczyzna==================================================================
 	
 //reszta=====================================================================
     glfwSwapBuffers(window); //Przerzuæ tylny bufor na przedni
@@ -290,26 +303,37 @@ void detectCollisionItself() {
 			(tailCoords[t][2] - ball.world_coord_z) * (tailCoords[t][2] - ball.world_coord_z));
 		//zderzy sie ze soba
 		if (d < distCollisionHead) {
-			std::cout << "zderzenie ze soba head:";
-			std::cout << head.world_coord_x << ", " << head.coord_z << ", blok: x:" << tailCoords[t][0] << ", " << tailCoords[t][2] << "\n";
-			std::cout << " odleglosc: " << d << ";\t";
-			std::cout << "\nt:" << t << std::endl;
-			Sleep(1000);
+			std::cout << "\n\nKONIEC GRY\n";
+			std::cout << "DLUGOSC OGONA: " << tailCoords.size() << "\n";
+			Sleep(2000);
 			exit(0);
 		}
 	}
+	float d1 = sqrt(pow((tree1.world_coord_x - ball.world_coord_x),2)  + pow((tree1.world_coord_y - ball.world_coord_y), 2)+ pow((tree1.world_coord_z - ball.world_coord_z), 2));
+	float d2 = sqrt(pow((tree2.world_coord_x - ball.world_coord_x),2)  + pow((tree2.world_coord_y - ball.world_coord_y), 2)+ pow((tree2.world_coord_z - ball.world_coord_z), 2));
+	float d3 = sqrt(pow((tree3.world_coord_x - ball.world_coord_x),2)  + pow((tree3.world_coord_y - ball.world_coord_y), 2)+ pow((tree3.world_coord_z - ball.world_coord_z), 2));
+	if (d1 < distCollisionTree || d2 < distCollisionTree || d3 < distCollisionTree) {
+		std::cout << "\n\nKONIEC GRY\n";
+		std::cout << "DLUGOSC OGONA: " <<tailCoords.size()<<"\n";
+		Sleep(2000);
+		exit(0);
+	}
+
 }
+
 
 void randApple() {
 	if (collisionWithApple == true) {
 		//zostalo zjedzonee
-		int x=rand()%20-10, z=rand()%20-10;
+		//int x=rand()%20-10, z=rand()%20-10;
+		int x ,z;
 		float dist;
 		bool out = false;
 		do {
 			out = false;
-			x = rand() % 20 - 10;
-			z = rand() % 200;
+			x = ball.world_coord_x+rand()%30+10;
+			z = ball.world_coord_z+rand()%30+10;
+			
 
 			dist = sqrt((head.world_coord_x - x) * (head.world_coord_x - x) +
 				(head.world_coord_z - z) * (head.world_coord_z - z));
