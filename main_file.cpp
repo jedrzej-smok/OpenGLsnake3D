@@ -387,7 +387,7 @@ void detectCollisionApple() {
 			(apple.world_coord_z - ball.world_coord_z) * (apple.world_coord_z - ball.world_coord_z));
 		//zderzy sie ze soba
 		if (dist < distCollisionApple) {
-			std::cout << "\n najechane jablko\n";
+			//std::cout << "\n najechane jablko\n";
 			
 			collisionWithApple = true;//powieksz weza
 			
