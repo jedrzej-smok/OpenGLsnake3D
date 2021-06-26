@@ -356,6 +356,19 @@ void randApple() {
 					break;
 				}
 			}
+			if (z < -90) {
+				z = -90;
+			}
+			if (z > 90) {
+				z = 90;
+			}
+			if (x < -100) {
+				x = -100;
+			}
+			if (x > 45) {
+				x = 45;
+			}
+
 		} while (dist < distRandApple || out);//zeby nie bylo na wezu
 		
 		
