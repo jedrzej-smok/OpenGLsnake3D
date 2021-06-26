@@ -331,9 +331,22 @@ void randApple() {
 		bool out = false;
 		do {
 			out = false;
-			x = ball.world_coord_x+rand()%30+10;
-			z = ball.world_coord_z+rand()%30+10;
+			x = ball.world_coord_x+rand()%30-15;
+			z = ball.world_coord_z+rand()%30-15;
 			
+			if (z < -90) {
+				z = -85;
+			}
+			if (z > 90) {
+				z = 85;
+			}
+			if (x < -100) {
+				x = -95;
+			}
+			if (x > 45) {
+				x = 40;
+			}
+
 
 			dist = sqrt((head.world_coord_x - x) * (head.world_coord_x - x) +
 				(head.world_coord_z - z) * (head.world_coord_z - z));
@@ -356,18 +369,7 @@ void randApple() {
 					break;
 				}
 			}
-			if (z < -90) {
-				z = -90;
-			}
-			if (z > 90) {
-				z = 90;
-			}
-			if (x < -100) {
-				x = -100;
-			}
-			if (x > 45) {
-				x = 45;
-			}
+			
 
 		} while (dist < distRandApple || out);//zeby nie bylo na wezu
 		
